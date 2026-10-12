@@ -30,7 +30,14 @@ func Download(target string, autoRename bool, chStatus chan int) {
 	} else if rxVideo.MatchString(target) {
 		err = DownloadVideo(target, outputDir)
 	} else {
-		log.Printf("Unsupported URL:\n\t%s\n", target)
+		// Fallback
+		err = DownloadGallery(target, outputDir)
+		if err != nil {
+			err = DownloadVideo(target, outputDir)
+			if err != nil {
+				log.Printf("Unsupported URL:\n\t%s\n", target)
+			}
+		}
 	}
 	if err != nil {
 		log.Panic(err)
