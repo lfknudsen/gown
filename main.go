@@ -27,6 +27,8 @@ func Download(target string, autoRename bool, chStatus chan int) {
 		err = DownloadGit(target, outputDir)
 	} else if rxGallery.MatchString(target) {
 		err = DownloadGallery(target, outputDir)
+	} else if rxVideo.MatchString(target) {
+		err = DownloadVideo(target, outputDir)
 	} else {
 		log.Printf("Unsupported URL:\n\t%s\n", target)
 	}

@@ -9,11 +9,9 @@ will be given a unique name.
 ## Dependencies
 To build, only `Go` is required to be installed.
 
-To support cloning Git repositories, `git` needs to be installed and on
-your PATH.
-
-To support downloading from DeviantArt, `gallery-dl` needs to be installed and
-on your PATH.
+Cloning Git repositories requires `git`.\
+Downloading from DeviantArt requires `gallery-dl`.\
+Downloading from YouTube requires `yt-dlp`.
 
 ## Build
 
@@ -32,3 +30,4 @@ gown [--overwrite] <URLs...>
 Gitlab.com, GitHub.com, any website that ends in .git\
 Mediafire.com
 DeviantArt.com
+YouTube.com
