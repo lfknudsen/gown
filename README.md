@@ -27,7 +27,7 @@ gown [--overwrite] <URLs...>
 
 ## Supported websites
 
-Gitlab.com, GitHub.com, any website that ends in .git\
-Mediafire.com
-DeviantArt.com
-YouTube.com
+GitLab.com, GitHub.com, any website that ends in .git\
+Mediafire.com\
+DeviantArt, and anything else supported by `gallery-dl`\
+YouTube, and anything else supported by `yt-dlp`
