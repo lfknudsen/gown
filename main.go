@@ -21,7 +21,7 @@ func FmtUrl(url string) string {
 
 func Download(target string, autoRename bool, chStatus chan int) {
 	if strings.Contains(target, "mediafire.com") {
-		downloadMediafire(target, outputDir, autoRename, chStatus)
+		_ = downloadMediafire(target, outputDir, autoRename, chStatus)
 	} else {
 		log.Printf("Unsupported URL:\n\t%s\n", target)
 	}

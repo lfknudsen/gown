@@ -22,11 +22,11 @@ func downloadFromQuickKey(quickKey string, outputDir string, autoRename bool, ch
 	downloadMediafire("https://www.mediafire.com/?"+quickKey, outputDir, autoRename, chStatus)
 }
 
-func downloadMediafire(url string, outputDir string, autoRename bool, chStatus chan int) {
+func downloadMediafire(url string, outputDir string, autoRename bool, chStatus chan int) bool {
 	matches := rx.FindAllStringSubmatch(url, -1)
 	if len(matches) == 0 || len(matches[0]) < 4 {
 		log.Printf("Could not parse URL:\n%s\n", url)
-		return
+		return false
 	}
 
 	url = "https://www.mediafire.com/file/" + matches[0][1]
@@ -34,7 +34,7 @@ func downloadMediafire(url string, outputDir string, autoRename bool, chStatus c
 	resp, err := http.Get(url)
 	if err != nil {
 		log.Println(err)
-		return
+		return false
 	}
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
@@ -44,7 +44,7 @@ func downloadMediafire(url string, outputDir string, autoRename bool, chStatus c
 	}(resp.Body)
 	if resp.StatusCode != 200 {
 		log.Println(resp.StatusCode)
-		return
+		return false
 	}
 
 	temp, err := os.CreateTemp(os.TempDir(), "*.html")
@@ -55,7 +55,7 @@ func downloadMediafire(url string, outputDir string, autoRename bool, chStatus c
 	sz, err := io.Copy(temp, resp.Body)
 	if err != nil {
 		log.Println(err)
-		return
+		return false
 	}
 	_ = temp.Close()
 
@@ -63,13 +63,13 @@ func downloadMediafire(url string, outputDir string, autoRename bool, chStatus c
 	html, err := os.ReadFile(tempFile)
 	if err != nil {
 		log.Println(err)
-		return
+		return false
 	}
 	htmlStr := string(html)
 	match := rxLink.FindStringSubmatch(htmlStr)
 	if match == nil || len(match) < 2 {
 		log.Printf("Could not find regexp in HTML file %s", tempFile)
-		return
+		return false
 	}
 	directLink := match[1]
 	log.Printf("Direct link: \"%s\"", directLink)
@@ -77,7 +77,7 @@ func downloadMediafire(url string, outputDir string, autoRename bool, chStatus c
 	err = os.MkdirAll(outputDir, 0755)
 	if err != nil {
 		log.Println("Error creating output directory:\n", err)
-		return
+		return false
 	}
 
 	filename := matches[0][3]
@@ -100,7 +100,7 @@ func downloadMediafire(url string, outputDir string, autoRename bool, chStatus c
 			f, err = os.Create(out)
 			if err != nil {
 				log.Println(err)
-				return
+				return false
 			}
 		}
 	}
@@ -114,7 +114,7 @@ func downloadMediafire(url string, outputDir string, autoRename bool, chStatus c
 	resp2, err := http.Get(directLink)
 	if err != nil {
 		log.Println(err)
-		return
+		return false
 	}
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
@@ -128,7 +128,7 @@ func downloadMediafire(url string, outputDir string, autoRename bool, chStatus c
 	sz, err = io.Copy(wr, resp2.Body)
 	if err != nil {
 		log.Println(err)
-		return
+		return false
 	}
 	log.Printf("Downloaded %d bytes to\n\t%s\n", sz, out)
 }
