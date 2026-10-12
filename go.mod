@@ -1,4 +1,4 @@
-module gown/m
+module gown
 
 go 1.27.2
 
