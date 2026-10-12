@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -18,23 +19,22 @@ var rx *regexp.Regexp = regexp.MustCompile(
 var rxLink *regexp.Regexp = regexp.MustCompile(
 	`aria-label="Download file"\s*href="([^"]+)"`)
 
-func downloadFromQuickKey(quickKey string, outputDir string, autoRename bool, chStatus chan int) {
-	downloadMediafire("https://www.mediafire.com/?"+quickKey, outputDir, autoRename, chStatus)
+func downloadFromQuickKey(quickKey string, outputDir string, autoRename bool, chStatus chan int) error {
+	return downloadMediafire("https://www.mediafire.com/?"+quickKey, outputDir, autoRename, chStatus)
 }
 
-func downloadMediafire(url string, outputDir string, autoRename bool, chStatus chan int) bool {
+func downloadMediafire(url string, outputDir string, autoRename bool, chStatus chan int) error {
 	matches := rx.FindAllStringSubmatch(url, -1)
 	if len(matches) == 0 || len(matches[0]) < 4 {
-		log.Printf("Could not parse URL:\n%s\n", url)
-		return false
+		msg := fmt.Sprintf("Could not parse URL:\n%s\n", url)
+		return errors.New(msg)
 	}
 
 	url = "https://www.mediafire.com/file/" + matches[0][1]
 
 	resp, err := http.Get(url)
 	if err != nil {
-		log.Println(err)
-		return false
+		return err
 	}
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
@@ -43,8 +43,8 @@ func downloadMediafire(url string, outputDir string, autoRename bool, chStatus c
 		}
 	}(resp.Body)
 	if resp.StatusCode != 200 {
-		log.Println(resp.StatusCode)
-		return false
+		msg := fmt.Sprintf("Failed to download from URL:\n%s\nReceived status code %s.\n", url, resp.Status)
+		return errors.New(msg)
 	}
 
 	temp, err := os.CreateTemp(os.TempDir(), "*.html")
@@ -54,30 +54,27 @@ func downloadMediafire(url string, outputDir string, autoRename bool, chStatus c
 
 	sz, err := io.Copy(temp, resp.Body)
 	if err != nil {
-		log.Println(err)
-		return false
+		return err
 	}
 	_ = temp.Close()
 
 	tempFile := temp.Name()
 	html, err := os.ReadFile(tempFile)
 	if err != nil {
-		log.Println(err)
-		return false
+		return err
 	}
 	htmlStr := string(html)
 	match := rxLink.FindStringSubmatch(htmlStr)
 	if match == nil || len(match) < 2 {
-		log.Printf("Could not find regexp in HTML file %s", tempFile)
-		return false
+		msg := fmt.Sprintf("Could not find regexp in HTML file %s", tempFile)
+		return errors.New(msg)
 	}
 	directLink := match[1]
 	log.Printf("Direct link: \"%s\"", directLink)
 
 	err = os.MkdirAll(outputDir, 0755)
 	if err != nil {
-		log.Println("Error creating output directory:\n", err)
-		return false
+		return err
 	}
 
 	filename := matches[0][3]
@@ -99,8 +96,7 @@ func downloadMediafire(url string, outputDir string, autoRename bool, chStatus c
 		} else {
 			f, err = os.Create(out)
 			if err != nil {
-				log.Println(err)
-				return false
+				return err
 			}
 		}
 	}
@@ -113,8 +109,7 @@ func downloadMediafire(url string, outputDir string, autoRename bool, chStatus c
 
 	resp2, err := http.Get(directLink)
 	if err != nil {
-		log.Println(err)
-		return false
+		return err
 	}
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
@@ -127,8 +122,8 @@ func downloadMediafire(url string, outputDir string, autoRename bool, chStatus c
 	wr := bufio.NewWriter(f)
 	sz, err = io.Copy(wr, resp2.Body)
 	if err != nil {
-		log.Println(err)
-		return false
+		return err
 	}
 	log.Printf("Downloaded %d bytes to\n\t%s\n", sz, out)
+	return nil
 }
