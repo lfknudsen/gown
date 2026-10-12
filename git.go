@@ -1,21 +1,19 @@
 package main
 
 import (
-	"log"
 	"os"
 
-	"github.com/go-git/go-git/v6"
+	gogit "github.com/go-git/go-git/v6"
 )
 
-func DownloadGit(url string, outputDir string) bool {
-	opts := git.CloneOptions{
+func DownloadGit(url string, outputDir string) error {
+	opts := gogit.CloneOptions{
 		URL:      url,
 		Progress: os.Stdout,
 	}
-	r, err := git.PlainClone(outputDir, &opts)
+	r, err := gogit.PlainClone(outputDir, &opts)
 	if err != nil {
-		log.Println(err)
-		return false
+		return err
 	}
 	defer func() {
 		err := r.Close()
@@ -23,5 +21,5 @@ func DownloadGit(url string, outputDir string) bool {
 			return
 		}
 	}()
-	return true
+	return nil
 }
