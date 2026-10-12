@@ -20,13 +20,16 @@ func FmtUrl(url string) string {
 }
 
 func Download(target string, autoRename bool, chStatus chan int) {
+	var err error = nil
 	if strings.Contains(target, "mediafire.com") {
-		err := downloadMediafire(target, outputDir, autoRename, chStatus)
-		if err != nil {
-			log.Fatal(err)
-		}
+		err = downloadMediafire(target, outputDir, autoRename, chStatus)
+	} else if rxGit.MatchString(target) {
+		err = DownloadGit(target, outputDir)
 	} else {
 		log.Printf("Unsupported URL:\n\t%s\n", target)
+	}
+	if err != nil {
+		log.Panic(err)
 	}
 }
 
