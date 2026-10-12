@@ -18,3 +18,7 @@ go build
 gown [--overwrite] <URLs...>
 ```
 
+## Supported websites
+
+Gitlab.com, GitHub.com, any website that ends in .git\
+Mediafire.com
