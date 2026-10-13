@@ -1,11 +1,15 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"regexp"
 	"strings"
 	"sync"
+	"time"
+
+	"github.com/Microsoft/go-winio/pkg/guid"
 )
 
 var outputDir string = "downloads"
@@ -34,13 +38,28 @@ func Download(target string, autoRename bool, chStatus chan int) {
 		err = DownloadGallery(target, outputDir)
 		if err != nil {
 			err = DownloadVideo(target, outputDir)
-			if err != nil {
-				log.Printf("Unsupported URL:\n\t%s\n", target)
-			}
 		}
 	}
 	if err != nil {
-		log.Panic(err)
+		log.Println(err)
+		// If nothing else worked, append the URL to a file.
+		log.Printf("Unsupported URL:\n\t%s\n", target)
+		filename := time.Now().UTC().Format(time.RFC3339)
+		filename = strings.Replace(filename, ":", "_", -1)
+		uid, err := guid.NewV4()
+		if err == nil {
+			filename += "-" + uid.String()
+		}
+		filename = fmt.Sprintf("queue/%s.txt", filename)
+		f, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		if err != nil {
+			log.Fatal(err)
+		}
+		_, err = f.WriteString(target + "\n")
+		if err != nil {
+			log.Println(err)
+		}
+		_ = f.Close()
 	}
 }
 
@@ -60,9 +79,11 @@ func main() {
 		}
 	}
 
-	wait := sync.WaitGroup{}
-	for _, target := range targets {
-		wait.Go(func() { Download(target, autoRename, chStatus) })
+	if len(targets) > 0 {
+		wait := sync.WaitGroup{}
+		for _, target := range targets {
+			wait.Go(func() { Download(target, autoRename, chStatus) })
+		}
+		wait.Wait()
 	}
-	wait.Wait()
 }
