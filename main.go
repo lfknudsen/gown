@@ -29,7 +29,7 @@ func Download(target string, autoRename bool, chStatus chan int) {
 		err = downloadMediafire(target, outputDir, autoRename, chStatus)
 	} else if rxGit.MatchString(target) {
 		err = DownloadGit(target, outputDir)
-	} else if rxGallery.MatchString(target) {
+	} else if matchesGallery(target) {
 		err = DownloadGallery(target, outputDir)
 	} else if rxVideo.MatchString(target) {
 		err = DownloadVideo(target, outputDir)
