@@ -3,6 +3,7 @@ package main
 import (
 	"path"
 	"path/filepath"
+	"regexp"
 	"strings"
 )
 
@@ -21,4 +22,11 @@ func FileStem(s string) string {
 
 func Ext(s string) string {
 	return s[strings.IndexRune(s, '.'):]
+}
+
+// UrlRoot throws away any "http[s]", "www", etc., as well as everything after
+// the first / (inclusive).
+// So "https://www.duckduckgo.com/search?" would become "duckduckgo.com"
+func UrlRoot(s string) string {
+	return regexp.MustCompile(`(?:https?://)?(?:ww[w\d]*\.)?([^/]+).*`).FindStringSubmatch(s)[1]
 }
