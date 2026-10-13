@@ -74,6 +74,8 @@ func main() {
 	for _, arg := range args {
 		if arg == "--overwrite" {
 			autoRename = false
+		} else if arg == "--generate-lists" {
+			generateLists()
 		} else {
 			targets = append(targets, arg)
 		}
