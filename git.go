@@ -10,7 +10,7 @@ import (
 	gogit "github.com/go-git/go-git/v6"
 )
 
-var rxGit = regexp.MustCompile(`(?:https?://)?(?:git(?:lab|hub)\.com/[^/]+/([^/]+)(?:.git)?|.+/([^/]+)\.git)`)
+var rxGit = regexp.MustCompile(`(?:https?://)?(?:gitlab\.com|github\.com|codeberg\.org)/[^/]+/([^/]+)(?:\.git)?|.+/([^/]+)\.git`)
 
 func DownloadPublicGit(url string, outputDir string) error {
 	opts := gogit.CloneOptions{
