@@ -20,7 +20,8 @@ const subDir = "yt-dlp"
 func DownloadVideo(url string, outputDir string) error {
 	outputDir = filepath.Join(outputDir, subDir)
 	cmd := exec.Command("yt-dlp",
-		"--write-subs", "--windows-filenames", "-P", outputDir, url)
+		"--write-subs", "--write-auto-subs", "--sub-langs", "en.*", "--embed-subs", "--embed-thumbnail",
+		"--embed-metadata", "--embed-chapters", "--write-description", "--write-info-json", "--windows-filenames", "-P", outputDir, url)
 	return cmd.Run()
 }
 
