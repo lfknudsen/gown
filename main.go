@@ -77,7 +77,7 @@ func main() {
 		if arg == "--overwrite" {
 			overwrite = true
 		} else if arg == "--generate-lists" {
-			generateLists()
+			generateGalleryList()
 		} else {
 			targets = append(targets, arg)
 		}
