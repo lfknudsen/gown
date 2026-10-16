@@ -33,6 +33,8 @@ func Download(target string, overwrite bool, chStatus chan int) {
 		err = DownloadGallery(target, outputDir)
 	} else if rxVideo.MatchString(target) {
 		err = DownloadVideo(target, outputDir)
+	} else if matchesMegaURL(target) {
+		err = downloadMega(target, outputDir)
 	} else {
 		// Fallback
 		err = DownloadGallery(target, outputDir)
@@ -68,12 +70,12 @@ func Queue(url string) {
 }
 
 func main() {
-	autoRename := true
+	overwrite := false
 	args := os.Args[1:]
 	targets := make([]string, 0, 1)
 	for _, arg := range args {
 		if arg == "--overwrite" {
-			autoRename = false
+			overwrite = true
 		} else if arg == "--generate-lists" {
 			generateLists()
 		} else {
@@ -84,7 +86,7 @@ func main() {
 	if len(targets) > 0 {
 		wait := sync.WaitGroup{}
 		for _, target := range targets {
-			wait.Go(func() { Download(target, autoRename, chStatus) })
+			wait.Go(func() { Download(target, overwrite, chStatus) })
 		}
 		wait.Wait()
 	}
