@@ -13,10 +13,10 @@ import (
 	"strings"
 )
 
-// rx is used to extract the key information from a MediaFire URL so that we
+// rxMediafire is used to extract the key information from a MediaFire URL so that we
 // can bypass redirects and middle-steps.
-var rx *regexp.Regexp = regexp.MustCompile(
-	`(?i)\s*(?:(?:http|https)://)?(?:www.)?mediafire.com/(?:view|file)/(([^/]+)/([^/]+))/?(?:file)?/?\s*`)
+var rxMediafire *regexp.Regexp = regexp.MustCompile(
+	`(?i)\s*(?:https?://)?(?:www\.)?mediafire\.com/(?:view|file)/(([^/]+)/([^/]+))/?(?:file)?/?\s*`)
 
 // rxLink is used to extract the direct download link from a Mediafire page's HTML.
 var rxLink *regexp.Regexp = regexp.MustCompile(
@@ -30,7 +30,7 @@ func downloadFromQuickKey(quickKey string, outputDir string, autoRename bool, ch
 // downloadMediafire downloads the HTML for the relevant page, copies the direct link from the
 // download button, and finally downloads the file from that direct link.
 func downloadMediafire(url string, outputDir string, overwrite bool, chStatus chan int) error {
-	matches := rx.FindAllStringSubmatch(url, -1)
+	matches := rxMediafire.FindAllStringSubmatch(url, -1)
 	if len(matches) == 0 || len(matches[0]) < 4 {
 		msg := fmt.Sprintf("Could not parse URL:\n%s\n", url)
 		return errors.New(msg)
