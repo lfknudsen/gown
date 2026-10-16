@@ -12,13 +12,16 @@ import (
 	"github.com/deckarep/golang-set/v3"
 )
 
+// supportedURLsFile is the path to the file which contains the list of URLs supported by gallery-dl
 const supportedURLsFile = "gallery-dl.txt"
 
+// DownloadGallery runs the `gallery-dl` command with the given url and output directory.
 func DownloadGallery(url string, outputDir string) error {
 	cmd := exec.Command("gallery-dl", "-d", outputDir, url)
 	return cmd.Run()
 }
 
+// matchesGallery returns true if the given URL supported by `gallery-dl`.
 func matchesGallery(url string) bool {
 	f, err := os.OpenFile(supportedURLsFile, os.O_RDONLY, 0666)
 	if err != nil {
@@ -41,6 +44,8 @@ func matchesGallery(url string) bool {
 	return false
 }
 
+// generateLists reads the table of supported websites and saves it as a
+// list that can be quickly parsed by matchesGallery.
 func generateLists() {
 	res, err := http.Get("https://codeberg.org/mikf/gallery-dl/raw/branch/master/docs/supportedsites.md")
 	if err != nil {
