@@ -49,6 +49,10 @@ func Download(target string, overwrite bool, chStatus chan int) {
 		if err == nil {
 			filename += "-" + uid.String()
 		}
+		err = os.MkdirAll("queue", os.ModeDir)
+		if err != nil {
+			log.Fatal(err)
+		}
 		filename = fmt.Sprintf("queue/%s.txt", filename)
 		f, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 		if err != nil {
