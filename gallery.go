@@ -12,7 +12,7 @@ import (
 	"github.com/deckarep/golang-set/v3"
 )
 
-var rxGallery = regexp.MustCompile(`(?:https?://)?(?:www.)?deviantart.com/.+`)
+const supportedURLsFile = "gallery-dl.txt"
 
 func DownloadGallery(url string, outputDir string) error {
 	cmd := exec.Command("gallery-dl", "-d", outputDir, url)
@@ -20,10 +20,10 @@ func DownloadGallery(url string, outputDir string) error {
 }
 
 func matchesGallery(url string) bool {
-	f, err := os.OpenFile("gallery-dl.txt", os.O_RDONLY, 0666)
+	f, err := os.OpenFile(supportedURLsFile, os.O_RDONLY, 0666)
 	if err != nil {
 		generateLists()
-		f, err = os.OpenFile("gallery-dl.txt", os.O_RDONLY, 0666)
+		f, err = os.OpenFile(supportedURLsFile, os.O_RDONLY, 0666)
 		if err != nil {
 			return false
 		}
@@ -55,11 +55,11 @@ func generateLists() {
 		log.Fatal(err)
 	}
 
-	f, err := os.OpenFile("gallery-dl.txt", os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0644)
+	f, err := os.OpenFile(supportedURLsFile, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0644)
 	defer func(f *os.File) {
 		err := f.Close()
 		if err != nil {
-			log.Fatal(err)
+			log.Panic(err)
 		}
 	}(f)
 
@@ -74,7 +74,7 @@ func generateLists() {
 	for entry := range set.Iter() {
 		_, err = wr.WriteString(entry + "\n")
 		if err != nil {
-			log.Fatal(err)
+			log.Panic(err)
 		}
 	}
 	_ = wr.Flush()
