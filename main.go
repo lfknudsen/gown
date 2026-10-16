@@ -31,7 +31,7 @@ func Download(target string, overwrite bool, chStatus chan int) {
 		err = DownloadGit(target, outputDir)
 	} else if matchesGallery(target) {
 		err = DownloadGallery(target, outputDir)
-	} else if rxVideo.MatchString(target) {
+	} else if matchesVideo(target) {
 		err = DownloadVideo(target, outputDir)
 	} else if matchesMegaURL(target) {
 		err = downloadMega(target, outputDir)
