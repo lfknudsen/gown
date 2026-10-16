@@ -5,7 +5,7 @@ import (
 	"regexp"
 )
 
-var rxMegaURL = regexp.MustCompile(`(?:https?://)?(?:www\.)?mega\.nz/.+`)
+var rxMegaURL = regexp.MustCompile(`(?:https?://)?(?:www\.)?mega(\.co)\.nz/.+`)
 
 func matchesMegaURL(url string) bool {
 	return rxMegaURL.MatchString(url)
