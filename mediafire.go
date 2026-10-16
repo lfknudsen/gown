@@ -29,7 +29,7 @@ func downloadFromQuickKey(quickKey string, outputDir string, autoRename bool, ch
 
 // downloadMediafire downloads the HTML for the relevant page, copies the direct link from the
 // download button, and finally downloads the file from that direct link.
-func downloadMediafire(url string, outputDir string, autoRename bool, chStatus chan int) error {
+func downloadMediafire(url string, outputDir string, overwrite bool, chStatus chan int) error {
 	matches := rx.FindAllStringSubmatch(url, -1)
 	if len(matches) == 0 || len(matches[0]) < 4 {
 		msg := fmt.Sprintf("Could not parse URL:\n%s\n", url)
@@ -90,7 +90,12 @@ func downloadMediafire(url string, outputDir string, autoRename bool, chStatus c
 	f, err := os.OpenFile(out, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0666)
 	if err != nil {
 		log.Printf("Error opening file %s for writing: %s", out, err)
-		if autoRename {
+		if overwrite {
+			f, err = os.Create(out)
+			if err != nil {
+				return err
+			}
+		} else {
 			i := 0
 			withoutExt, _ := strings.CutSuffix(filename, filepath.Ext(filename))
 			for err != nil {
@@ -98,11 +103,6 @@ func downloadMediafire(url string, outputDir string, autoRename bool, chStatus c
 				newFilename := fmt.Sprintf("%s (%d)%s", withoutExt, i, filepath.Ext(filename))
 				out = filepath.Join(filepath.Dir(out), newFilename)
 				f, err = os.OpenFile(out, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0666)
-			}
-		} else {
-			f, err = os.Create(out)
-			if err != nil {
-				return err
 			}
 		}
 	}

@@ -23,10 +23,10 @@ func FmtUrl(url string) string {
 	return url
 }
 
-func Download(target string, autoRename bool, chStatus chan int) {
+func Download(target string, overwrite bool, chStatus chan int) {
 	var err error = nil
 	if strings.Contains(target, "mediafire.com") {
-		err = downloadMediafire(target, outputDir, autoRename, chStatus)
+		err = downloadMediafire(target, outputDir, overwrite, chStatus)
 	} else if rxGit.MatchString(target) {
 		err = DownloadGit(target, outputDir)
 	} else if matchesGallery(target) {
