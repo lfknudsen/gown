@@ -10,6 +10,8 @@ import (
 	gogit "github.com/go-git/go-git/v6"
 )
 
+const repoDir = "repositories"
+
 var rxGit = regexp.MustCompile(`(?:https?://)?(?:gitlab\.com|github\.com|codeberg\.org)/[^/]+/([^/]+)(?:\.git)?|.+/([^/]+)\.git`)
 
 func DownloadPublicGit(url string, outputDir string) error {
@@ -17,7 +19,7 @@ func DownloadPublicGit(url string, outputDir string) error {
 		URL:      url,
 		Progress: os.Stdout,
 	}
-	r, err := gogit.PlainClone(outputDir, &opts)
+	r, err := gogit.PlainClone(filepath.Join(outputDir, repoDir), &opts)
 	if err != nil {
 		return err
 	}
@@ -30,7 +32,7 @@ func DownloadGit(url string, outputDir string) error {
 		return fmt.Errorf("invalid git url: %s", url)
 	}
 	name := UrlStem(subs[1])
-	dir := filepath.Join(outputDir, name)
+	dir := filepath.Join(outputDir, repoDir, name)
 	cmd := exec.Command("git", "clone", url, dir)
 	return cmd.Run()
 }
