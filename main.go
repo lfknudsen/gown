@@ -37,10 +37,7 @@ func Download(target string, overwrite bool, chStatus chan int) {
 		err = downloadMega(target, outputDir)
 	} else {
 		// Fallback
-		err = DownloadGallery(target, outputDir)
-		if err != nil {
-			err = DownloadVideo(target, outputDir)
-		}
+		err = downloadFile(target, outputDir, overwrite)
 	}
 	if err != nil {
 		log.Println(err)
