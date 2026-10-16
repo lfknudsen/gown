@@ -25,7 +25,7 @@ func DownloadGallery(url string, outputDir string) error {
 func matchesGallery(url string) bool {
 	f, err := os.OpenFile(supportedURLsFile, os.O_RDONLY, 0666)
 	if err != nil {
-		generateLists()
+		generateGalleryList()
 		f, err = os.OpenFile(supportedURLsFile, os.O_RDONLY, 0666)
 		if err != nil {
 			return false
@@ -44,9 +44,9 @@ func matchesGallery(url string) bool {
 	return false
 }
 
-// generateLists reads the table of supported websites and saves it as a
+// generateGalleryList reads the table of supported websites and saves it as a
 // list that can be quickly parsed by matchesGallery.
-func generateLists() {
+func generateGalleryList() {
 	res, err := http.Get("https://codeberg.org/mikf/gallery-dl/raw/branch/master/docs/supportedsites.md")
 	if err != nil {
 		log.Fatal(err)
