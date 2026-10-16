@@ -58,7 +58,7 @@ func downloadMediafire(url string, outputDir string, overwrite bool, chStatus ch
 		_ = temp.Close()
 	}(temp)
 
-	sz, err := io.Copy(temp, resp.Body)
+	_, err = io.Copy(temp, resp.Body)
 	if err != nil {
 		return err
 	}
@@ -126,7 +126,7 @@ func downloadMediafire(url string, outputDir string, overwrite bool, chStatus ch
 
 	log.Printf("Filename: %s", out)
 	wr := bufio.NewWriter(f)
-	sz, err = io.Copy(wr, resp2.Body)
+	sz, err := io.Copy(wr, resp2.Body)
 	if err != nil {
 		return err
 	}
