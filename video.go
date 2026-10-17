@@ -34,7 +34,10 @@ func generateVideoLists() {
 	r, w := io.Pipe()
 	cmd.Stdout = w
 	scanner := bufio.NewScanner(r)
-
+	err := cmd.Run()
+	if err != nil {
+		log.Panic(err)
+	}
 	set := mapset.NewSet[string]()
 	for scanner.Scan() {
 		matches := rxStem.FindStringSubmatch(scanner.Text())
