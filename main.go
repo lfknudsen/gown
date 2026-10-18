@@ -11,7 +11,7 @@ import (
 	"sync"
 )
 
-const VERSION = "0.3.0"
+const VERSION = "0.3.1"
 
 func getExecutableDir() string {
 	ex, err := os.Executable()
@@ -63,21 +63,18 @@ func Download(url string, chStatus chan int) {
 func initialiseDirectories(dir ...string) {
 	for _, d := range dir {
 		err := os.MkdirAll(d, os.ModeDir)
-		if err != nil {
-			FATAL(err)
-		}
+		FATAL(err)
 	}
 }
 
 func main() {
 	wr, err := os.OpenFile(logFile, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-	if err != nil {
-		FATAL(err)
-	}
+	FATAL(err)
 	defer func() {
 		if wr != nil {
 			DEBUG("Closing log file")
-			_ = wr.Close()
+			err = wr.Close()
+			FATAL(err)
 		}
 	}()
 	logWriter := bufio.NewWriter(wr)
@@ -98,16 +95,16 @@ func main() {
 		generateVideoList()
 	}
 
-	if len(flag.Args()) > 0 {
-		wait := sync.WaitGroup{}
-		for _, url := range flag.Args() {
-			wait.Go(func() { Download(url, chStatus) })
-		}
-		wait.Wait()
-	} else {
+	if len(flag.Args()) == 0 {
 		printHelp()
 		os.Exit(0)
 	}
+
+	wait := sync.WaitGroup{}
+	for _, url := range flag.Args() {
+		wait.Go(func() { Download(url, chStatus) })
+	}
+	wait.Wait()
 
 	DEBUG("Done")
 }
