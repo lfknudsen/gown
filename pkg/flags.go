@@ -22,6 +22,8 @@ var Singlethreaded = flag.Bool("s", false, "If true, downloads are performed seq
 var Retries = flag.Int("retries", 5, "Number of times to retry gallery download. -1 = infinite.")
 var RetriesStr = strconv.Itoa(*Retries)
 
+var Port = flag.Int("port", 8080, "The port to connect or listen to.")
+
 func PrintHelp() {
 	fmt.Printf("Gown v%s\n\nUsage: %s [OPTIONS] <URL(s)...>\n\nOptions:\n", VERSION, os.Args[0])
 	flag.PrintDefaults()
@@ -37,5 +39,11 @@ func ParseFlags() {
 	if *Help {
 		PrintHelp()
 		os.Exit(0)
+	}
+
+	if *Port < 1000 {
+		_, _ = fmt.Fprintln(os.Stderr, "Port must be a four-digit positive integer.")
+		PrintHelp()
+		os.Exit(1)
 	}
 }

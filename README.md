@@ -75,6 +75,9 @@ Options:
                     include this argument to update the lists, so that this
                     programme can correctly delegate URLs to those services.
                     Default: false.
+
+-port <integer>     The port to connect/listen to when in server or client mode.
+                    Default: 8080
 ```
 
 Whether you prefix options with one or two dashes is irrelevant.

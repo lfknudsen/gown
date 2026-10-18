@@ -11,7 +11,7 @@ func main() {
 	defer CloseLogFile(logFile)
 	ParseFlags()
 
-	client := NewGownClient(8080)
+	client := NewGownClient(*Port)
 	for _, url := range flag.Args() {
 		client.RequestDownload(url)
 	}

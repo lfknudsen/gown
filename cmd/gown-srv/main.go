@@ -17,7 +17,7 @@ func main() {
 		WARN("Finished generating lists of supported domains.")
 	}
 
-	wait := StartServer(8080)
+	wait := StartServer(*Port)
 	Interactive(Download)
 	for {
 		select {
