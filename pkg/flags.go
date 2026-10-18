@@ -26,3 +26,16 @@ func PrintHelp() {
 	fmt.Printf("Gown v%s\n\nUsage: %s [OPTIONS] <URL(s)...>\n\nOptions:\n", VERSION, os.Args[0])
 	flag.PrintDefaults()
 }
+
+func ParseFlags() {
+	flag.Usage = PrintHelp
+	flag.Parse()
+	if *Retries < -1 {
+		*Retries = -1
+	}
+	RetriesStr = strconv.Itoa(*Retries)
+	if *Help {
+		PrintHelp()
+		os.Exit(0)
+	}
+}
