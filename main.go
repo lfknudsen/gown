@@ -100,6 +100,11 @@ func main() {
 		os.Exit(0)
 	}
 
+	if flag.Args()[0] == "queue" {
+		Queue(flag.Args()[1:]...)
+		os.Exit(0)
+	}
+
 	wait := sync.WaitGroup{}
 	for _, url := range flag.Args() {
 		wait.Go(func() { Download(url, chStatus) })
