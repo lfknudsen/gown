@@ -19,7 +19,5 @@ go-install:
 	go install -C cmd/queue
 	go install -C cmd/gown-srv
 
-proto/listen.pb.go proto/listen_grpc.pb.go proto/listen.proto:
+proto: proto/listen.proto
 	protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative proto/listen.proto
-
-proto: proto/listen.pb.go proto/listen_grpc.pb.go
