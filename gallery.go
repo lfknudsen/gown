@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"os/exec"
@@ -30,12 +29,11 @@ func matchesGallery(url string) bool {
 		generateGalleryList()
 		f, err = os.OpenFile(supportedURLsFile, os.O_RDONLY, 0666)
 		if err != nil {
+			ERROR(err)
 			return false
 		}
 	}
-	defer func(f *os.File) {
-		_ = f.Close()
-	}(f)
+	defer closeFile(f)
 	scanner := bufio.NewScanner(f)
 	url = UrlRoot(url)
 	for scanner.Scan() {
@@ -50,25 +48,14 @@ func matchesGallery(url string) bool {
 // list that can be quickly parsed by matchesGallery.
 func generateGalleryList() {
 	res, err := http.Get("https://codeberg.org/mikf/gallery-dl/raw/branch/master/docs/supportedsites.md")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(res.Body)
+	FATAL(err)
+	defer closeReadCloser(res.Body)
 	reader := bufio.NewReader(res.Body)
 	content, err := io.ReadAll(reader)
-	if err != nil {
-		log.Fatal(err)
-	}
+	FATAL(err)
 
 	f, err := os.OpenFile(supportedURLsFile, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0644)
-	defer func(f *os.File) {
-		err := f.Close()
-		if err != nil {
-			log.Panic(err)
-		}
-	}(f)
+	defer closeFile(f)
 
 	set := mapset.NewSet[string]()
 
@@ -80,9 +67,7 @@ func generateGalleryList() {
 	wr := bufio.NewWriter(f)
 	for entry := range set.Iter() {
 		_, err = wr.WriteString(entry + "\n")
-		if err != nil {
-			log.Panic(err)
-		}
+		PANIC(err)
 	}
 	_ = wr.Flush()
 }
