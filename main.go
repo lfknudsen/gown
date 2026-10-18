@@ -1,8 +1,8 @@
 package main
 
 import (
+	"bufio"
 	"flag"
-	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -16,7 +16,7 @@ const VERSION = "0.3.0"
 func getExecutableDir() string {
 	ex, err := os.Executable()
 	if err != nil {
-		log.Fatal(err)
+		FATAL("Error while retrieving the path to the Gown executable:", err)
 	}
 	return filepath.Dir(ex)
 }
@@ -52,7 +52,8 @@ func Download(url string, chStatus chan int) {
 		err = downloadFile(url, outputDir)
 	}
 	if err != nil {
-		log.Println(err)
+		ERROR(err)
+		ERROR("Unsupported URL:\n\t%s\n", url)
 		// If nothing else worked, add the URL to a queue file.
 		Queue(url)
 	}
@@ -63,12 +64,26 @@ func initialiseDirectories(dir ...string) {
 	for _, d := range dir {
 		err := os.MkdirAll(d, os.ModeDir)
 		if err != nil {
-			log.Fatal(err)
+			FATAL(err)
 		}
 	}
 }
 
 func main() {
+	wr, err := os.OpenFile(logFile, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		FATAL(err)
+	}
+	defer func() {
+		if wr != nil {
+			DEBUG("Closing log file")
+			_ = wr.Close()
+		}
+	}()
+	logWriter := bufio.NewWriter(wr)
+	log.SetOutput(logWriter)
+	log.SetFlags(log.Lmicroseconds | log.LstdFlags)
+
 	flag.Usage = printHelp
 	flag.Parse()
 	if *help {
@@ -93,4 +108,6 @@ func main() {
 		printHelp()
 		os.Exit(0)
 	}
+
+	DEBUG("Done")
 }
