@@ -47,6 +47,14 @@ gown [OPTIONS] queue <URLs...>
 queue [OPTIONS] <URLs...>
             Saves the URL(s) to timestamped files in the 'gown/queue' directory.
 
+gown queue download
+queue download
+            Downloads the files in the queue.
+
+gown queue list
+queue list
+            Prints the URLs in the queue to the standard output.
+
 gown [OPTIONS] interactive
 gown-srv [OPTIONS]
             Launches an interactive shell which allows you to repeatedly
