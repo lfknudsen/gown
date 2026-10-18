@@ -38,6 +38,11 @@ func main() {
 		os.Exit(0)
 	}
 
+	if len(flag.Args()) == 1 && flag.Args()[0] == "list" {
+		ListQueue()
+		os.Exit(0)
+	}
+
 	Queue(flag.Args()...)
 
 	DEBUG("Done")
