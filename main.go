@@ -76,7 +76,7 @@ var generateLists = flag.Bool("generate-lists", false,
 	"Generate/regenerate the lists of supported websites for gallery and video downloads.")
 
 func printHelp() {
-	fmt.Printf("Gown v%s\n\nUsage: %s [OPTIONS]\n\nOptions:\n", VERSION, os.Args[0])
+	fmt.Printf("Gown v%s\n\nUsage: %s [OPTIONS] <URL(s)...>\n\nOptions:\n", VERSION, os.Args[0])
 	flag.PrintDefaults()
 }
 
