@@ -70,6 +70,7 @@ func main() {
 	go Srv.Serve(grpcServer, lis, wait)
 	Interactive()
 
+	Interactive(Download)
 	for {
 		select {
 		case <-wait:
