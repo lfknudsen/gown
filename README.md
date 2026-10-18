@@ -8,6 +8,9 @@ which will need to be installed.
 ## Dependencies
 To build, only `Go` is required to be installed.
 
+The following dependencies are only required if you wish to download from the
+websites they support. You will need the executables/scripts to be on your PATH:
+
 Cloning Git repositories requires `git`.\
 Downloading from DeviantArt (and other gallery websites) requires `gallery-dl`.\
 Downloading from YouTube (and other video websites) requires `yt-dlp`.\
