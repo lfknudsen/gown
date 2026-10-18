@@ -1,16 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
 	"sync"
-	"time"
-
-	"github.com/Microsoft/go-winio/pkg/guid"
 )
 
 func getExecutableDir() string {
@@ -23,6 +19,7 @@ func getExecutableDir() string {
 
 var root = getExecutableDir()
 var outputDir string = filepath.Join(root, "downloads")
+var queueDir string = filepath.Join(root, "queue")
 
 var chStatus = make(chan int, 1)
 
@@ -51,33 +48,20 @@ func Download(target string, overwrite bool, chStatus chan int) {
 	}
 	if err != nil {
 		log.Println(err)
-		// If nothing else worked, append the URL to a file.
+		// If nothing else worked, add the URL to a queue file.
 		log.Printf("Unsupported URL:\n\t%s\n", target)
-		filename := time.Now().UTC().Format(time.RFC3339)
-		filename = strings.Replace(filename, ":", "_", -1)
-		uid, err := guid.NewV4()
-		if err == nil {
-			filename += "-" + uid.String()
-		}
-		err = os.MkdirAll("queue", os.ModeDir)
-		if err != nil {
-			log.Fatal(err)
-		}
-		filename = fmt.Sprintf("queue/%s.txt", filename)
-		f, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-		if err != nil {
-			log.Fatal(err)
-		}
-		_, err = f.WriteString(target + "\n")
-		if err != nil {
-			log.Println(err)
-		}
-		_ = f.Close()
+		Queue(target)
 	}
 }
 
-func Queue(url string) {
-
+// initialiseDirectories ensures that the given directories exist.
+func initialiseDirectories(dir ...string) {
+	for _, d := range dir {
+		err := os.MkdirAll(d, os.ModeDir)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 }
 
 func main() {
@@ -93,6 +77,8 @@ func main() {
 			targets = append(targets, arg)
 		}
 	}
+
+	initialiseDirectories(outputDir, queueDir)
 
 	if len(targets) > 0 {
 		wait := sync.WaitGroup{}
