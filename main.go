@@ -67,7 +67,7 @@ func initialiseDirectories(dir ...string) {
 	}
 }
 
-var help = flag.Bool("h", false, "Print this message and exit.")
+var help = flag.Bool("h", false, "Print this message and exit. (Alias: --help)")
 
 var overwrite = flag.Bool("overwrite", false,
 	"Overwrite existing files rather than choosing a unique name for the new one.")
