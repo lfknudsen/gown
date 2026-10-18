@@ -1,6 +1,8 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -8,6 +10,8 @@ import (
 	"strings"
 	"sync"
 )
+
+const VERSION = "0.3.0"
 
 func getExecutableDir() string {
 	ex, err := os.Executable()
@@ -30,10 +34,10 @@ func FmtUrl(url string) string {
 	return url
 }
 
-func Download(target string, overwrite bool, chStatus chan int) {
+func Download(target string, chStatus chan int) {
 	var err error = nil
 	if strings.Contains(target, "mediafire.com") {
-		err = downloadMediafire(target, outputDir, overwrite, chStatus)
+		err = downloadMediafire(target, outputDir, chStatus)
 	} else if rxGit.MatchString(target) {
 		err = DownloadGit(target, outputDir)
 	} else if matchesGallery(target) {
@@ -44,7 +48,7 @@ func Download(target string, overwrite bool, chStatus chan int) {
 		err = downloadMega(target, outputDir)
 	} else {
 		// Fallback
-		err = downloadFile(target, outputDir, overwrite)
+		err = downloadFile(target, outputDir)
 	}
 	if err != nil {
 		log.Println(err)
@@ -64,27 +68,42 @@ func initialiseDirectories(dir ...string) {
 	}
 }
 
+var help = flag.Bool("h", false, "Print this message and exit.")
+
+var overwrite = flag.Bool("overwrite", false,
+	"Overwrite existing files rather than choosing a unique name for the new one.")
+
+var generateLists = flag.Bool("generate-lists", false,
+	"Generate/regenerate the lists of supported websites for gallery and video downloads.")
+
+func printHelp() {
+	fmt.Printf("Gown v%s\n\nUsage: %s [OPTIONS]\n\nOptions:\n", VERSION, os.Args[0])
+	flag.PrintDefaults()
+}
+
 func main() {
-	overwrite := false
-	args := os.Args[1:]
-	targets := make([]string, 0, 1)
-	for _, arg := range args {
-		if arg == "--overwrite" {
-			overwrite = true
-		} else if arg == "--generate-lists" {
-			generateGalleryList()
-		} else {
-			targets = append(targets, arg)
-		}
+	flag.Usage = printHelp
+	flag.Parse()
+	if *help {
+		printHelp()
+		os.Exit(0)
 	}
 
 	initialiseDirectories(outputDir, queueDir)
 
-	if len(targets) > 0 {
+	if *generateLists {
+		generateGalleryList()
+		generateVideoLists()
+	}
+
+	if len(flag.Args()) > 0 {
 		wait := sync.WaitGroup{}
-		for _, target := range targets {
-			wait.Go(func() { Download(target, overwrite, chStatus) })
+		for _, url := range flag.Args() {
+			wait.Go(func() { Download(url, chStatus) })
 		}
 		wait.Wait()
+	} else {
+		printHelp()
+		os.Exit(0)
 	}
 }

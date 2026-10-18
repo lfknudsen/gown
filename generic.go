@@ -16,7 +16,7 @@ import (
 var rxUrlFilename *regexp.Regexp = regexp.MustCompile(
 	`(?i)\s*(?:https?://)?(?:ww[^.]\.)?(?:[^/]/)+([^/]+])`)
 
-func downloadFile(url string, outputDir string, overwrite bool) error {
+func downloadFile(url string, outputDir string) error {
 	matches := rxUrlFilename.FindStringSubmatch(url)
 	if len(matches) != 2 {
 		msg := fmt.Sprintf("Could not parse URL:\n%s\n", url)
@@ -34,7 +34,7 @@ func downloadFile(url string, outputDir string, overwrite bool) error {
 	f, err := os.OpenFile(out, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0666)
 	if err != nil {
 		log.Printf("Error opening file %s for writing: %s", out, err)
-		if overwrite {
+		if *overwrite {
 			f, err = os.Create(out)
 			if err != nil {
 				return err
