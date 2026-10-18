@@ -1,4 +1,4 @@
-package main
+package pkg
 
 import (
 	"bufio"
@@ -26,7 +26,7 @@ func DownloadGallery(url string, outputDir string) error {
 func matchesGallery(url string) bool {
 	f, err := os.OpenFile(supportedURLsFile, os.O_RDONLY, 0666)
 	if err != nil {
-		generateGalleryList()
+		GenerateGalleryList()
 		f, err = os.OpenFile(supportedURLsFile, os.O_RDONLY, 0666)
 		if err != nil {
 			ERROR(err)
@@ -44,9 +44,9 @@ func matchesGallery(url string) bool {
 	return false
 }
 
-// generateGalleryList reads the table of supported websites and saves it as a
+// GenerateGalleryList reads the table of supported websites and saves it as a
 // list that can be quickly parsed by matchesGallery.
-func generateGalleryList() {
+func GenerateGalleryList() {
 	res, err := http.Get("https://codeberg.org/mikf/gallery-dl/raw/branch/master/docs/supportedsites.md")
 	FATAL(err)
 	defer closeReadCloser(res.Body)

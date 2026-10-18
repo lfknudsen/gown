@@ -1,4 +1,4 @@
-package main
+package pkg
 
 import (
 	"bufio"
@@ -29,9 +29,9 @@ func DownloadVideo(url string, outputDir string) error {
 
 var rxStem = regexp.MustCompile(`(?:https?//:)?(?:ww[^.]\.)?([^/ :]+)`)
 
-// generateVideoList reads the table of supported websites and saves it as a
+// GenerateVideoList reads the table of supported websites and saves it as a
 // list that can be quickly parsed by matchesVideo.
-func generateVideoList() {
+func GenerateVideoList() {
 	cmd := exec.Command("yt-dlp", "--list-extractors")
 	r, w := io.Pipe()
 	cmd.Stdout = w
@@ -69,7 +69,7 @@ func generateVideoList() {
 func matchesVideo(url string) bool {
 	f, err := os.OpenFile(supportedVideoURLsFile, os.O_RDONLY, 0666)
 	if err != nil {
-		generateVideoList()
+		GenerateVideoList()
 		f, err = os.OpenFile(supportedVideoURLsFile, os.O_RDONLY, 0666)
 		if err != nil {
 			return false

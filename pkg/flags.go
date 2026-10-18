@@ -1,4 +1,4 @@
-package main
+package pkg
 
 import (
 	"flag"
@@ -6,17 +6,17 @@ import (
 	"os"
 )
 
-var help = flag.Bool("h", false, "Print this message and exit. (Alias: --help)")
+var Help = flag.Bool("h", false, "Print this message and exit. (Alias: --help)")
 
-var overwrite = flag.Bool("overwrite", false,
+var Overwrite = flag.Bool("overwrite", false,
 	"Overwrite existing files rather than choosing a unique name for the new one.")
 
-var generateLists = flag.Bool("generate-lists", false,
+var GenerateLists = flag.Bool("generate-lists", false,
 	"Generate/regenerate the lists of supported websites for gallery and video downloads.")
 
-var verbose = flag.Int("v", 1, "Set verbosity level. Higher = more messages. 0-3")
+var Verbose = flag.Int("v", 1, "Set verbosity level. Higher = more messages. 0-3")
 
-func printHelp() {
+func PrintHelp() {
 	fmt.Printf("Gown v%s\n\nUsage: %s [OPTIONS] <URL(s)...>\n\nOptions:\n", VERSION, os.Args[0])
 	flag.PrintDefaults()
 }

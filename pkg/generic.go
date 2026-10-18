@@ -1,4 +1,4 @@
-package main
+package pkg
 
 import (
 	"bufio"
@@ -33,7 +33,7 @@ func downloadFile(url string, outputDir string) error {
 	f, err := os.OpenFile(out, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0666)
 	if err != nil {
 		DEBUG(fmt.Sprintf("Error opening file %s for writing: %s", out, err))
-		if *overwrite {
+		if *Overwrite {
 			f, err = os.Create(out)
 			if err != nil {
 				return err

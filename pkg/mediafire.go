@@ -1,4 +1,4 @@
-package main
+package pkg
 
 import (
 	"bufio"
@@ -82,7 +82,7 @@ func downloadMediafire(url string, outputDir string, chStatus chan int) error {
 		// In this case, we may want change the name of the output file depending
 		// on the -overwrite flag.
 		DEBUG(fmt.Sprintf("Error opening file %s for writing: %s", out, err))
-		if *overwrite {
+		if *Overwrite {
 			f, err = os.Create(out)
 			if err != nil {
 				return err

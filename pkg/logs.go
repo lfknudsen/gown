@@ -1,4 +1,4 @@
-package main
+package pkg
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ import (
 
 func DEBUG(msg any) {
 	if msg != nil {
-		if *verbose >= 3 {
+		if *Verbose >= 3 {
 			fmt.Println(msg)
 		}
 		log.Println(msg)
@@ -19,7 +19,7 @@ func DEBUG(msg any) {
 
 func INFO(msg any) {
 	if msg != nil {
-		if *verbose >= 2 {
+		if *Verbose >= 2 {
 			fmt.Println(msg)
 		}
 		log.Println(msg)
@@ -28,7 +28,7 @@ func INFO(msg any) {
 
 func WARN(msg any) {
 	if msg != nil {
-		if *verbose >= 1 {
+		if *Verbose >= 1 {
 			fmt.Println(msg)
 		}
 		log.Println(msg)
@@ -37,7 +37,7 @@ func WARN(msg any) {
 
 func ERROR(msg any) {
 	if msg != nil {
-		if *verbose >= 1 {
+		if *Verbose >= 1 {
 			_, _ = fmt.Fprintln(os.Stderr, msg)
 		}
 		log.Println(msg)
@@ -46,7 +46,7 @@ func ERROR(msg any) {
 
 func FATAL(msg any) {
 	if msg != nil {
-		if *verbose >= 1 {
+		if *Verbose >= 1 {
 			_, _ = fmt.Fprintln(os.Stderr, msg)
 		}
 		log.Fatalln(msg)
@@ -55,7 +55,7 @@ func FATAL(msg any) {
 
 func PANIC(msg any) {
 	if msg != nil {
-		if *verbose >= 1 {
+		if *Verbose >= 1 {
 			_, _ = fmt.Fprintln(os.Stderr, msg)
 		}
 		log.Panicln(msg)
@@ -64,6 +64,6 @@ func PANIC(msg any) {
 
 const logDirName = "logs"
 
-var logDir = filepath.Join(gownDirectory, logDirName)
+var LogDir = filepath.Join(GownDirectory, logDirName)
 
-var logFile = filepath.Join(logDir, "log_"+uuid.New().String()+".txt")
+var LogFile = filepath.Join(LogDir, "log_"+uuid.New().String()+".txt")
