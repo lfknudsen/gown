@@ -59,6 +59,7 @@ gown [OPTIONS] interactive
 gown-srv [OPTIONS]
             Launches an interactive shell which allows you to repeatedly
             input and download URLs.
+            Exit by entering (without quotiation marks) "exit" or "quit".
 
 Options:
 -h | --help         Print help message and exit.
