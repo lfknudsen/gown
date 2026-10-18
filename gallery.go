@@ -18,6 +18,8 @@ const supportedURLsFile = "gallery-dl.txt"
 // DownloadGallery runs the `gallery-dl` command with the given url and output directory.
 func DownloadGallery(url string, outputDir string) error {
 	cmd := exec.Command("gallery-dl", "-d", outputDir, url)
+	cmd.Stderr = os.Stderr
+	cmd.Stdout = os.Stdout
 	return cmd.Run()
 }
 
