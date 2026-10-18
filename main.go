@@ -68,19 +68,6 @@ func initialiseDirectories(dir ...string) {
 	}
 }
 
-var help = flag.Bool("h", false, "Print this message and exit. (Alias: --help)")
-
-var overwrite = flag.Bool("overwrite", false,
-	"Overwrite existing files rather than choosing a unique name for the new one.")
-
-var generateLists = flag.Bool("generate-lists", false,
-	"Generate/regenerate the lists of supported websites for gallery and video downloads.")
-
-func printHelp() {
-	fmt.Printf("Gown v%s\n\nUsage: %s [OPTIONS] <URL(s)...>\n\nOptions:\n", VERSION, os.Args[0])
-	flag.PrintDefaults()
-}
-
 func main() {
 	flag.Usage = printHelp
 	flag.Parse()
