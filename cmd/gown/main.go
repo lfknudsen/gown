@@ -23,6 +23,10 @@ func main() {
 	if *GenerateLists {
 		GenerateGalleryList()
 		GenerateVideoList()
+		WARN("Finished generating lists of supported domains.")
+		if len(flag.Args()) == 0 {
+			os.Exit(0)
+		}
 	}
 
 	if len(flag.Args()) == 0 {

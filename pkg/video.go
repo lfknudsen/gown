@@ -2,8 +2,8 @@ package pkg
 
 import (
 	"bufio"
+	"bytes"
 	"fmt"
-	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -32,22 +32,23 @@ var rxStem = regexp.MustCompile(`(?:https?//:)?(?:ww[^.]\.)?([^/ :]+)`)
 // list that can be quickly parsed by matchesVideo.
 func GenerateVideoList() {
 	cmd := exec.Command("yt-dlp", "--list-extractors")
-	r, w := io.Pipe()
-	cmd.Stdout = w
-	scanner := bufio.NewScanner(r)
+	var out bytes.Buffer
+	cmd.Stdout = &out
 	err := cmd.Run()
 	PANIC(err)
+
 	set := mapset.NewSet[string]()
+	scanner := bufio.NewScanner(&out)
+	scanner.Split(bufio.ScanLines)
 	for scanner.Scan() {
-		matches := rxStem.FindStringSubmatch(scanner.Text())
+		text := scanner.Text()
+		matches := rxStem.FindStringSubmatch(text)
 		if len(matches) != 2 {
-			fmt.Printf("Could not parse domain %s", scanner.Text())
+			fmt.Printf("Could not parse domain %s", text)
 			continue
 		}
 		set.Add(matches[1])
 	}
-	_ = w.Close()
-	_ = r.Close()
 
 	InitialiseDirectories(DataDir)
 	f, err := os.OpenFile(supportedVideoURLsFile, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0644)
