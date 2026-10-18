@@ -9,45 +9,57 @@ import (
 )
 
 func DEBUG(msg ...any) {
-	if *verbose >= 3 {
-		fmt.Println(msg)
+	if msg != nil {
+		if *verbose >= 3 {
+			fmt.Println(msg)
+		}
+		log.Println(msg)
 	}
-	log.Println(msg)
 }
 
 func INFO(msg ...any) {
-	if *verbose >= 2 {
-		fmt.Println(msg)
+	if msg != nil {
+		if *verbose >= 2 {
+			fmt.Println(msg)
+		}
+		log.Println(msg)
 	}
-	log.Println(msg)
 }
 
 func WARN(msg ...any) {
-	if *verbose >= 1 {
-		fmt.Println(msg)
+	if msg != nil {
+		if *verbose >= 1 {
+			fmt.Println(msg)
+		}
+		log.Println(msg)
 	}
-	log.Println(msg)
 }
 
 func ERROR(msg ...any) {
-	if *verbose >= 1 {
-		_, _ = fmt.Fprintln(os.Stderr, msg)
+	if msg != nil {
+		if *verbose >= 1 {
+			_, _ = fmt.Fprintln(os.Stderr, msg)
+		}
+		log.Println(msg)
 	}
-	log.Println(msg)
 }
 
 func FATAL(msg ...any) {
-	if *verbose >= 1 {
-		_, _ = fmt.Fprintln(os.Stderr, msg)
+	if msg != nil {
+		if *verbose >= 1 {
+			_, _ = fmt.Fprintln(os.Stderr, msg)
+		}
+		log.Fatalln(msg)
 	}
-	log.Fatalln(msg)
 }
 
 func PANIC(msg ...any) {
-	if *verbose >= 1 {
-		_, _ = fmt.Fprintln(os.Stderr, msg)
+	if msg != nil {
+		if *verbose >= 1 {
+			_, _ = fmt.Fprintln(os.Stderr, msg)
+		}
+		log.Panicln(msg)
 	}
-	log.Panicln(msg)
 }
 
 const logDir = "logs"
