@@ -32,7 +32,7 @@ func main() {
 		if len(flag.Args()) == 2 && flag.Args()[1] == "download" {
 			DownloadQueue()
 		} else if len(flag.Args()) == 2 && flag.Args()[1] == "list" {
-			ListQueue()
+			ListPrompt()
 		} else {
 			Queue(flag.Args()[1:]...)
 		}
