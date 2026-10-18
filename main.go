@@ -92,7 +92,7 @@ func main() {
 
 	if *generateLists {
 		generateGalleryList()
-		generateVideoLists()
+		generateVideoList()
 	}
 
 	if len(flag.Args()) > 0 {

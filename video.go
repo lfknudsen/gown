@@ -27,9 +27,9 @@ func DownloadVideo(url string, outputDir string) error {
 
 var rxStem = regexp.MustCompile(`(?:https?//:)?(?:ww[^.]\.)?([^/ :]+)`)
 
-// generateVideoLists reads the table of supported websites and saves it as a
+// generateVideoList reads the table of supported websites and saves it as a
 // list that can be quickly parsed by matchesVideo.
-func generateVideoLists() {
+func generateVideoList() {
 	cmd := exec.Command("yt-dlp", "--list-extractors")
 	r, w := io.Pipe()
 	cmd.Stdout = w
@@ -67,7 +67,7 @@ func generateVideoLists() {
 func matchesVideo(url string) bool {
 	f, err := os.OpenFile(supportedVideoURLsFile, os.O_RDONLY, 0666)
 	if err != nil {
-		generateVideoLists()
+		generateVideoList()
 		f, err = os.OpenFile(supportedVideoURLsFile, os.O_RDONLY, 0666)
 		if err != nil {
 			return false
