@@ -29,7 +29,7 @@ func FmtUrl(url string) string {
 	return url
 }
 
-func Download(url string, chStatus chan int) {
+func download(url string, chStatus chan int, shouldQueue bool) {
 	DEBUG("Downloading " + url)
 	var err error = nil
 	if strings.Contains(url, "mediafire.com") {
@@ -48,10 +48,20 @@ func Download(url string, chStatus chan int) {
 	}
 	if err != nil {
 		ERROR(err)
-		ERROR("Unsupported URL:\n\t" + url + "\n")
-		// If nothing else worked, add the URL to a queue file.
-		Queue(url)
+		if shouldQueue {
+			ERROR("Unsupported URL:\n\t" + url + "\n")
+			// If nothing else worked, add the URL to a queue file.
+			Queue(url)
+		}
 	}
+}
+
+func Download(url string, chStatus chan int) {
+	download(url, chStatus, true)
+}
+
+func DownloadFromQueue(url string, chStatus chan int) {
+	download(url, chStatus, false)
 }
 
 // InitialiseDirectories ensures that the given directories exist.
