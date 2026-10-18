@@ -49,23 +49,13 @@ func downloadFile(url string, outputDir string) error {
 			}
 		}
 	}
-	defer func(f *os.File) {
-		err := f.Close()
-		if err != nil {
-			ERROR(err)
-		}
-	}(f)
+	defer closeFile(f)
 
 	resp2, err := http.Get(url)
 	if err != nil {
 		return err
 	}
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-			ERROR(err)
-		}
-	}(resp2.Body)
+	defer closeReadCloser(resp2.Body)
 
 	DEBUG("Filename: %s", out)
 	wr := bufio.NewWriter(f)
