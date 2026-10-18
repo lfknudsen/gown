@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strconv"
 )
 
 var Help = flag.Bool("h", false, "Print this message and exit. (Alias: --help)")
@@ -17,6 +18,9 @@ var GenerateLists = flag.Bool("generate-lists", false,
 var Verbose = flag.Int("v", 1, "Set verbosity level. Higher = more messages. 0-3")
 
 var Singlethreaded = flag.Bool("s", false, "If true, downloads are performed sequentially.")
+
+var Retries = flag.Int("retries", 5, "Number of times to retry gallery download. -1 = infinite.")
+var RetriesStr = strconv.Itoa(*Retries)
 
 func PrintHelp() {
 	fmt.Printf("Gown v%s\n\nUsage: %s [OPTIONS] <URL(s)...>\n\nOptions:\n", VERSION, os.Args[0])
