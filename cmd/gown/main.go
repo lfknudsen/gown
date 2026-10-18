@@ -35,7 +35,11 @@ func main() {
 	}
 
 	if flag.Args()[0] == "queue" {
-		Queue(flag.Args()[1:]...)
+		if len(flag.Args()) == 2 && flag.Args()[1] == "download" {
+			DownloadQueue()
+		} else {
+			Queue(flag.Args()[1:]...)
+		}
 		os.Exit(0)
 	}
 
