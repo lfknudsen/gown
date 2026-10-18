@@ -23,7 +23,6 @@ func getExecutableDir() string {
 
 var root = getExecutableDir()
 var outputDir string = filepath.Join(root, "downloads")
-var queueDir string = filepath.Join(root, "queue")
 
 var chStatus = make(chan int, 1)
 

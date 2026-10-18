@@ -9,6 +9,8 @@ import (
 	"uuid"
 )
 
+var queueDir string = filepath.Join(root, "queue")
+
 func Queue(url string) {
 	filename := time.Now().UTC().Format(time.RFC3339)
 	filename = strings.Replace(filename, ":", "_", -1)
