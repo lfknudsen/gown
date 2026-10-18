@@ -41,32 +41,17 @@ func downloadMediafire(url string, outputDir string, chStatus chan int) error {
 	if err != nil {
 		return err
 	}
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-			ERROR(err)
-		}
-	}(resp.Body)
+	defer closeReadCloser(resp.Body)
 	if resp.StatusCode != 200 {
 		msg := fmt.Sprintf("Failed to download from URL:\n%s\nReceived status code %s.\n", url, resp.Status)
 		return errors.New(msg)
 	}
 
 	temp, err := os.CreateTemp(os.TempDir(), "*.html")
-	defer func(temp *os.File) {
-		err = temp.Close()
-		if err != nil {
-			ERROR(err)
-		}
-	}(temp)
-
 	_, err = io.Copy(temp, resp.Body)
+	closeFile(temp)
 	if err != nil {
 		return err
-	}
-	err = temp.Close()
-	if err != nil {
-		ERROR(err)
 	}
 
 	tempFile := temp.Name()
@@ -94,6 +79,8 @@ func downloadMediafire(url string, outputDir string, chStatus chan int) error {
 
 	f, err := os.OpenFile(out, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0666)
 	if err != nil {
+		// In this case, we may want change the name of the output file depending
+		// on the -overwrite flag.
 		DEBUG("Error opening file %s for writing: %s", out, err)
 		if *overwrite {
 			f, err = os.Create(out)
@@ -111,23 +98,13 @@ func downloadMediafire(url string, outputDir string, chStatus chan int) error {
 			}
 		}
 	}
-	defer func(f *os.File) {
-		err := f.Close()
-		if err != nil {
-			ERROR(err)
-		}
-	}(f)
+	defer closeFile(f)
 
 	resp2, err := http.Get(directLink)
 	if err != nil {
 		return err
 	}
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-			ERROR(err)
-		}
-	}(resp2.Body)
+	defer closeReadCloser(resp2.Body)
 
 	DEBUG("Filename: %s", out)
 	wr := bufio.NewWriter(f)
