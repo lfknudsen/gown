@@ -6,13 +6,14 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"regexp"
 
 	"github.com/deckarep/golang-set/v3"
 )
 
 // supportedURLsFile is the path to the file which contains the list of URLs supported by gallery-dl
-const supportedURLsFile = "gallery-dl.txt"
+var supportedURLsFile = filepath.Join(GownDirectory, "data", "gallery-dl.txt")
 
 // DownloadGallery runs the `gallery-dl` command with the given url and output directory.
 func DownloadGallery(url string, outputDir string) error {
