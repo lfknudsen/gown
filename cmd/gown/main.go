@@ -44,11 +44,17 @@ func main() {
 		os.Exit(0)
 	}
 
-	wait := sync.WaitGroup{}
-	for _, url := range flag.Args() {
-		wait.Go(func() { Download(url, ChStatus) })
+	if *Singlethreaded {
+		for _, url := range flag.Args() {
+			Download(url, ChStatus)
+		}
+	} else {
+		wait := sync.WaitGroup{}
+		for _, url := range flag.Args() {
+			wait.Go(func() { Download(url, ChStatus) })
+		}
+		wait.Wait()
 	}
-	wait.Wait()
 
 	DEBUG("Done")
 }
