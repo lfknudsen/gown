@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	. "gown/pkg"
+	"gown/pkg/web"
 	"os"
 	"sync"
 )
@@ -41,6 +42,21 @@ func main() {
 	if len(flag.Args()) >= 1 && flag.Args()[0] == "interactive" {
 		Interactive(Download)
 		os.Exit(0)
+	}
+
+	if len(flag.Args()) >= 1 && flag.Args()[0] == "server" {
+		wait := web.StartServer(*Port)
+		select {
+		case <-wait:
+			os.Exit(0)
+		}
+	}
+
+	if len(flag.Args()) >= 1 && flag.Args()[0] == "client" {
+		client := web.NewGownClient(*Port)
+		for _, domain := range flag.Args()[1:] {
+			client.RequestDownload(domain)
+		}
 	}
 
 	if *Singlethreaded {
