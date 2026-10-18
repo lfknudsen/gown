@@ -61,6 +61,15 @@ gown-srv [OPTIONS]
             input and download URLs.
             Exit by entering (without quotiation marks) "exit" or "quit".
 
+gown [OPTIONS] server
+gown-srv [OPTIONS]
+            Launches a GRPC server which will allow clients to request it to
+            perform download of URLs.
+
+gown [OPTIONS] client <URL(s)...>
+gown-client [OPTIONS] <URL(s)...>
+            Requests a GRPC server to download the given URL(s).
+
 Options:
 -h | --help         Print help message and exit.
 
