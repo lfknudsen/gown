@@ -1,0 +1,17 @@
+edition = "2023";
+
+option go_package = "./listen";
+
+service Listener {
+  rpc Download(Link) returns (Reply) {}
+}
+
+message Link {
+  int64     id = 1;
+  string token = 2;
+  string   url = 3;
+}
+
+message Reply {
+  bool Finished = 1;
+}
