@@ -13,7 +13,7 @@ import (
 )
 
 // supportedURLsFile is the path to the file which contains the list of URLs supported by gallery-dl
-var supportedURLsFile = filepath.Join(GownDirectory, "data", "gallery-dl.txt")
+var supportedURLsFile = filepath.Join(DataDir, "gallery-dl.txt")
 
 // DownloadGallery runs the `gallery-dl` command with the given url and output directory.
 func DownloadGallery(url string, outputDir string) error {
@@ -55,6 +55,7 @@ func GenerateGalleryList() {
 	content, err := io.ReadAll(reader)
 	FATAL(err)
 
+	InitialiseDirectories(DataDir)
 	f, err := os.OpenFile(supportedURLsFile, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0644)
 	defer closeFile(f)
 

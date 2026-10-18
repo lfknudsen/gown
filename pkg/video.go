@@ -12,7 +12,7 @@ import (
 	mapset "github.com/deckarep/golang-set/v3"
 )
 
-var supportedVideoURLsFile = filepath.Join(GownDirectory, "data", "yt-dlp_sites.txt")
+var supportedVideoURLsFile = filepath.Join(DataDir, "yt-dlp_sites.txt")
 
 const subDirVideos = "yt-dlp"
 
@@ -49,6 +49,7 @@ func GenerateVideoList() {
 	_ = w.Close()
 	_ = r.Close()
 
+	InitialiseDirectories(DataDir)
 	f, err := os.OpenFile(supportedVideoURLsFile, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0644)
 	defer closeFile(f)
 	wr := bufio.NewWriter(f)

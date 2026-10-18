@@ -18,6 +18,7 @@ func getExecutableDir() string {
 var ExecutableDir = getExecutableDir()
 var GownDirectory = filepath.Join(ExecutableDir, "gown")
 var OutputDir = filepath.Join(GownDirectory, "downloads")
+var DataDir = filepath.Join(GownDirectory, "data")
 
 var ChStatus = make(chan int, 1)
 
