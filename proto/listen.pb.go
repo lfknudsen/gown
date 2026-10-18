@@ -23,7 +23,7 @@ const (
 
 type Link struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            *int64                 `protobuf:"varint,1,opt,name=id" json:"id,omitempty"`
+	Id            *string                `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
 	Token         *string                `protobuf:"bytes,2,opt,name=token" json:"token,omitempty"`
 	Url           *string                `protobuf:"bytes,3,opt,name=url" json:"url,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -60,11 +60,11 @@ func (*Link) Descriptor() ([]byte, []int) {
 	return file_proto_listen_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Link) GetId() int64 {
+func (x *Link) GetId() string {
 	if x != nil && x.Id != nil {
 		return *x.Id
 	}
-	return 0
+	return ""
 }
 
 func (x *Link) GetToken() string {
@@ -131,7 +131,7 @@ const file_proto_listen_proto_rawDesc = "" +
 	"\n" +
 	"\x12proto/listen.proto\">\n" +
 	"\x04Link\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x14\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x14\n" +
 	"\x05token\x18\x02 \x01(\tR\x05token\x12\x10\n" +
 	"\x03url\x18\x03 \x01(\tR\x03url\"#\n" +
 	"\x05Reply\x12\x1a\n" +

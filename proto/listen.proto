@@ -7,7 +7,7 @@ service Listener {
 }
 
 message Link {
-  int64     id = 1;
+  string    id = 1;
   string token = 2;
   string   url = 3;
 }
