@@ -10,7 +10,8 @@ To build, only `Go` is required to be installed.
 
 Cloning Git repositories requires `git`.\
 Downloading from DeviantArt (and other gallery websites) requires `gallery-dl`.\
-Downloading from YouTube (and other video websites) requires `yt-dlp`.
+Downloading from YouTube (and other video websites) requires `yt-dlp`.\
+Downloading from Mega requires `megatools`.
 
 ## Build
 
