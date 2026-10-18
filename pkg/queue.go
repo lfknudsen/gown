@@ -2,6 +2,7 @@ package pkg
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -66,5 +67,24 @@ func DownloadQueue() {
 		Download(url, chStatus)
 		err = trash.Throw(path)
 		ERROR(err)
+	}
+}
+
+func ListQueue() {
+	entries, err := os.ReadDir(QueueDir)
+	FATAL(err)
+	if len(entries) == 0 {
+		fmt.Println("Queue is empty")
+		return
+	}
+	for _, entry := range entries {
+		path := filepath.Join(QueueDir, entry.Name())
+		data, err := os.ReadFile(path)
+		if err != nil {
+			ERROR(err)
+			continue
+		}
+		url := strings.TrimSpace(string(data))
+		fmt.Println(url)
 	}
 }
