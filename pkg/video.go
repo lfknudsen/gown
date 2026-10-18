@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -13,12 +12,12 @@ import (
 	mapset "github.com/deckarep/golang-set/v3"
 )
 
-const supportedVideoURLsFile = "data/yt-dlp_sites.txt"
+var supportedVideoURLsFile = filepath.Join(GownDirectory, "data", "yt-dlp_sites.txt")
 
-const subDir = "yt-dlp"
+const subDirVideos = "yt-dlp"
 
 func DownloadVideo(url string, outputDir string) error {
-	outputDir = filepath.Join(outputDir, subDir)
+	outputDir = filepath.Join(outputDir, subDirVideos)
 	cmd := exec.Command("yt-dlp",
 		"--write-subs", "--write-auto-subs", "--sub-langs", "en.*", "--embed-subs", "--embed-thumbnail",
 		"--embed-metadata", "--embed-chapters", "--write-description", "--write-info-json", "--windows-filenames", "-P", outputDir, url)
@@ -37,9 +36,7 @@ func GenerateVideoList() {
 	cmd.Stdout = w
 	scanner := bufio.NewScanner(r)
 	err := cmd.Run()
-	if err != nil {
-		log.Panic(err)
-	}
+	PANIC(err)
 	set := mapset.NewSet[string]()
 	for scanner.Scan() {
 		matches := rxStem.FindStringSubmatch(scanner.Text())
@@ -53,15 +50,11 @@ func GenerateVideoList() {
 	_ = r.Close()
 
 	f, err := os.OpenFile(supportedVideoURLsFile, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0644)
-	defer func(f *os.File) {
-		_ = f.Close()
-	}(f)
+	defer closeFile(f)
 	wr := bufio.NewWriter(f)
 	for entry := range set.Iter() {
 		_, err = wr.WriteString(entry + "\n")
-		if err != nil {
-			log.Panic(err)
-		}
+		PANIC(err)
 	}
 	_ = wr.Flush()
 }
@@ -75,9 +68,7 @@ func matchesVideo(url string) bool {
 			return false
 		}
 	}
-	defer func(f *os.File) {
-		_ = f.Close()
-	}(f)
+	defer closeFile(f)
 	scanner := bufio.NewScanner(f)
 	url = UrlStem(url)
 	for scanner.Scan() {
