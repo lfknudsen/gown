@@ -22,6 +22,8 @@ func DownloadVideo(url string, outputDir string) error {
 	cmd := exec.Command("yt-dlp",
 		"--write-subs", "--write-auto-subs", "--sub-langs", "en.*", "--embed-subs", "--embed-thumbnail",
 		"--embed-metadata", "--embed-chapters", "--write-description", "--write-info-json", "--windows-filenames", "-P", outputDir, url)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 	return cmd.Run()
 }
 
