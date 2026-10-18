@@ -37,6 +37,8 @@ func main() {
 	if flag.Args()[0] == "queue" {
 		if len(flag.Args()) == 2 && flag.Args()[1] == "download" {
 			DownloadQueue()
+		} else if len(flag.Args()) == 2 && flag.Args()[1] == "list" {
+			ListQueue()
 		} else {
 			Queue(flag.Args()[1:]...)
 		}
