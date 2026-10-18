@@ -26,6 +26,7 @@ func Queue(url ...string) {
 		_, err = f.WriteString(url + "\n")
 		closeFile(f)
 		FATAL(err)
+		WARN(fmt.Sprintf("Added to queue: %s", url))
 	}
 }
 
