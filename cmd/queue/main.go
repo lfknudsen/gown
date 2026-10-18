@@ -32,7 +32,7 @@ func main() {
 	}
 
 	if len(flag.Args()) == 1 && flag.Args()[0] == "list" {
-		ListQueue()
+		ListPrompt()
 		os.Exit(0)
 	}
 
