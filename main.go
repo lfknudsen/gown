@@ -21,8 +21,9 @@ func getExecutableDir() string {
 	return filepath.Dir(ex)
 }
 
-var root = getExecutableDir()
-var outputDir string = filepath.Join(root, "downloads")
+var executableDir = getExecutableDir()
+var gownDirectory = filepath.Join(executableDir, "gown")
+var outputDir = filepath.Join(gownDirectory, "downloads")
 
 var chStatus = make(chan int, 1)
 
@@ -33,27 +34,27 @@ func FmtUrl(url string) string {
 	return url
 }
 
-func Download(target string, chStatus chan int) {
+func Download(url string, chStatus chan int) {
+	DEBUG("Downloading", url)
 	var err error = nil
-	if strings.Contains(target, "mediafire.com") {
-		err = downloadMediafire(target, outputDir, chStatus)
-	} else if rxGit.MatchString(target) {
-		err = DownloadGit(target, outputDir)
-	} else if matchesGallery(target) {
-		err = DownloadGallery(target, outputDir)
-	} else if matchesVideo(target) {
-		err = DownloadVideo(target, outputDir)
-	} else if matchesMegaURL(target) {
-		err = downloadMega(target, outputDir)
+	if strings.Contains(url, "mediafire.com") {
+		err = downloadMediafire(url, outputDir, chStatus)
+	} else if rxGit.MatchString(url) {
+		err = DownloadGit(url, outputDir)
+	} else if matchesGallery(url) {
+		err = DownloadGallery(url, outputDir)
+	} else if matchesVideo(url) {
+		err = DownloadVideo(url, outputDir)
+	} else if matchesMegaURL(url) {
+		err = downloadMega(url, outputDir)
 	} else {
 		// Fallback
-		err = downloadFile(target, outputDir)
+		err = downloadFile(url, outputDir)
 	}
 	if err != nil {
 		log.Println(err)
 		// If nothing else worked, add the URL to a queue file.
-		log.Printf("Unsupported URL:\n\t%s\n", target)
-		Queue(target)
+		Queue(url)
 	}
 }
 
