@@ -64,7 +64,7 @@ func DownloadQueue() {
 		}
 		url := strings.TrimSpace(string(data))
 		Download(url, chStatus)
-		err = trash.Throw(entry.Name())
+		err = trash.Throw(path)
 		ERROR(err)
 	}
 }
