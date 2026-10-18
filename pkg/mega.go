@@ -17,11 +17,13 @@ func matchesMegaURL(url string) bool {
 	return rxMegaURL.MatchString(url)
 }
 
-var dirMega = "mega"
+var DirMegaName = "mega"
+
+var DirMega = filepath.Join(OutputDir, DirMegaName)
 
 var rxFolderName = regexp.MustCompile(`<span class="not-loading selectable-txt">([^<]+)</span>`)
 
-func downloadMega(url string, outputDir string) error {
+func downloadMega(url string) error {
 	matches := rxMegaURL.FindStringSubmatch(url)[1:]
 	if len(matches) < 1 || len(matches) > 2 {
 		return errors.New(fmt.Sprintf("weirdly formatted MEGA URL: %s", url))
@@ -29,7 +31,7 @@ func downloadMega(url string, outputDir string) error {
 	idSection := len(matches) - 1
 	idx := strings.IndexRune(matches[idSection], '#')
 	folderName := matches[idSection][:idx]
-	outputDir = filepath.Join(outputDir, dirMega, folderName)
+	outputDir := filepath.Join(DirMega, folderName)
 	err := os.MkdirAll(outputDir, 0755)
 	if err != nil {
 		return err

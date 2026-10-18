@@ -35,13 +35,13 @@ func Download(url string, chStatus chan int) {
 	if strings.Contains(url, "mediafire.com") {
 		err = downloadMediafire(url, OutputDir, chStatus)
 	} else if rxGit.MatchString(url) {
-		err = DownloadGit(url, OutputDir)
+		err = DownloadGit(url)
 	} else if matchesGallery(url) {
 		err = DownloadGallery(url, OutputDir)
 	} else if matchesVideo(url) {
 		err = DownloadVideo(url, OutputDir)
 	} else if matchesMegaURL(url) {
-		err = downloadMega(url, OutputDir)
+		err = downloadMega(url)
 	} else {
 		// Fallback
 		err = downloadFile(url, OutputDir)
@@ -60,4 +60,8 @@ func InitialiseDirectories(dir ...string) {
 		err := os.MkdirAll(d, os.ModeDir)
 		FATAL(err)
 	}
+}
+
+func SetupDirs() {
+	InitialiseDirectories(OutputDir, QueueDir, DirMega, RepoDir)
 }
