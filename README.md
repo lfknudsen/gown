@@ -85,6 +85,15 @@ Options:
                     programme can correctly delegate URLs to those services.
                     Default: false.
 
+-s                  Perform downloads sequentially (by default multiple URLs are
+                    downloaded concurrently).
+
+-v <integer>        Verbosity level. Higher = more info is printed to console.
+                    0 is silent. Default: 1.
+
+-retries <integer>  The number of retries to attempt when downloading through
+                    gallery-dl. Less than 0 = infinite. Default: 5.
+
 -port <integer>     The port to connect/listen to when in server or client mode.
                     Default: 8080
 ```
