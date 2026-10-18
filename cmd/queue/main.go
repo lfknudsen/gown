@@ -6,6 +6,7 @@ import (
 )
 
 func main() {
+	InitialiseLogging()
 	flag.Parse()
 	Queue(flag.Args()...)
 }

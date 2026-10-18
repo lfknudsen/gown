@@ -1,12 +1,30 @@
 package pkg
 
 import (
+	"bufio"
 	"fmt"
 	"log"
 	"os"
 	"path/filepath"
 	"uuid"
 )
+
+func InitialiseLogging() {
+	InitialiseDirectories(LogDir)
+	wr, err := os.OpenFile(LogFile, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
+	FATAL(err)
+	defer func() {
+		if wr != nil {
+			DEBUG("Closing log file")
+			err = wr.Close()
+			FATAL(err)
+		}
+	}()
+	logWriter := bufio.NewWriter(wr)
+	log.SetOutput(logWriter)
+	log.SetFlags(log.Lmicroseconds | log.LstdFlags)
+	DEBUG("Finished setting up log file.")
+}
 
 func DEBUG(msg any) {
 	if msg != nil {

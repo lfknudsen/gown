@@ -1,31 +1,14 @@
 package main
 
 import (
-	"bufio"
 	"flag"
 	. "gown/pkg"
-	"log"
 	"os"
 	"sync"
 )
 
 func main() {
-	InitialiseDirectories(LogDir)
-	wr, err := os.OpenFile(LogFile, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
-	FATAL(err)
-	defer func() {
-		if wr != nil {
-			DEBUG("Closing log file")
-			err = wr.Close()
-			FATAL(err)
-		}
-	}()
-	DEBUG("Opened the new log file.")
-	logWriter := bufio.NewWriter(wr)
-	log.SetOutput(logWriter)
-	log.SetFlags(log.Lmicroseconds | log.LstdFlags)
-	DEBUG("Finished setting up log file.")
-
+	InitialiseLogging()
 	flag.Usage = PrintHelp
 	flag.Parse()
 	DEBUG("Parsed command-line flags.")
