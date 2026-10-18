@@ -28,11 +28,11 @@ func downloadFile(url string, outputDir string) error {
 
 	filename := matches[1]
 	out := filepath.Join(outputDir, filename)
-	DEBUG("Filename: %s", out)
+	DEBUG("Filename: " + out)
 
 	f, err := os.OpenFile(out, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0666)
 	if err != nil {
-		DEBUG("Error opening file %s for writing: %s", out, err)
+		DEBUG(fmt.Sprintf("Error opening file %s for writing: %s", out, err))
 		if *overwrite {
 			f, err = os.Create(out)
 			if err != nil {
@@ -57,12 +57,12 @@ func downloadFile(url string, outputDir string) error {
 	}
 	defer closeReadCloser(resp2.Body)
 
-	DEBUG("Filename: %s", out)
+	DEBUG("Filename: " + out)
 	wr := bufio.NewWriter(f)
 	sz, err := io.Copy(wr, resp2.Body)
 	if err != nil {
 		return err
 	}
-	INFO("Downloaded %d bytes to\n\t%s\n", sz, out)
+	INFO(fmt.Sprintf("Downloaded %d bytes to\n\t%s\n", sz, out))
 	return nil
 }

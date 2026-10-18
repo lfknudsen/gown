@@ -8,7 +8,7 @@ import (
 	"uuid"
 )
 
-func DEBUG(msg ...any) {
+func DEBUG(msg any) {
 	if msg != nil {
 		if *verbose >= 3 {
 			fmt.Println(msg)
@@ -17,7 +17,7 @@ func DEBUG(msg ...any) {
 	}
 }
 
-func INFO(msg ...any) {
+func INFO(msg any) {
 	if msg != nil {
 		if *verbose >= 2 {
 			fmt.Println(msg)
@@ -26,7 +26,7 @@ func INFO(msg ...any) {
 	}
 }
 
-func WARN(msg ...any) {
+func WARN(msg any) {
 	if msg != nil {
 		if *verbose >= 1 {
 			fmt.Println(msg)
@@ -35,7 +35,7 @@ func WARN(msg ...any) {
 	}
 }
 
-func ERROR(msg ...any) {
+func ERROR(msg any) {
 	if msg != nil {
 		if *verbose >= 1 {
 			_, _ = fmt.Fprintln(os.Stderr, msg)
@@ -44,7 +44,7 @@ func ERROR(msg ...any) {
 	}
 }
 
-func FATAL(msg ...any) {
+func FATAL(msg any) {
 	if msg != nil {
 		if *verbose >= 1 {
 			_, _ = fmt.Fprintln(os.Stderr, msg)
@@ -53,7 +53,7 @@ func FATAL(msg ...any) {
 	}
 }
 
-func PANIC(msg ...any) {
+func PANIC(msg any) {
 	if msg != nil {
 		if *verbose >= 1 {
 			_, _ = fmt.Fprintln(os.Stderr, msg)
@@ -62,6 +62,8 @@ func PANIC(msg ...any) {
 	}
 }
 
-const logDir = "logs"
+const logDirName = "logs"
 
-var logFile = filepath.Join(gownDirectory, logDir, "log_"+uuid.New().String()+".txt")
+var logDir = filepath.Join(gownDirectory, logDirName)
+
+var logFile = filepath.Join(logDir, "log_"+uuid.New().String()+".txt")

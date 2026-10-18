@@ -15,9 +15,7 @@ const VERSION = "0.3.1"
 
 func getExecutableDir() string {
 	ex, err := os.Executable()
-	if err != nil {
-		FATAL("Error while retrieving the path to the Gown executable:", err)
-	}
+	FATAL(err)
 	return filepath.Dir(ex)
 }
 
@@ -35,7 +33,7 @@ func FmtUrl(url string) string {
 }
 
 func Download(url string, chStatus chan int) {
-	DEBUG("Downloading", url)
+	DEBUG("Downloading " + url)
 	var err error = nil
 	if strings.Contains(url, "mediafire.com") {
 		err = downloadMediafire(url, outputDir, chStatus)
@@ -53,7 +51,7 @@ func Download(url string, chStatus chan int) {
 	}
 	if err != nil {
 		ERROR(err)
-		ERROR("Unsupported URL:\n\t%s\n", url)
+		ERROR("Unsupported URL:\n\t" + url + "\n")
 		// If nothing else worked, add the URL to a queue file.
 		Queue(url)
 	}
@@ -68,7 +66,8 @@ func initialiseDirectories(dir ...string) {
 }
 
 func main() {
-	wr, err := os.OpenFile(logFile, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	initialiseDirectories(logDir)
+	wr, err := os.OpenFile(logFile, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
 	FATAL(err)
 	defer func() {
 		if wr != nil {
@@ -77,12 +76,15 @@ func main() {
 			FATAL(err)
 		}
 	}()
+	DEBUG("Opened the new log file.")
 	logWriter := bufio.NewWriter(wr)
 	log.SetOutput(logWriter)
 	log.SetFlags(log.Lmicroseconds | log.LstdFlags)
+	DEBUG("Finished setting up log file.")
 
 	flag.Usage = printHelp
 	flag.Parse()
+	DEBUG("Parsed command-line flags.")
 	if *help {
 		printHelp()
 		os.Exit(0)

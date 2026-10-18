@@ -66,7 +66,7 @@ func downloadMediafire(url string, outputDir string, chStatus chan int) error {
 		return errors.New(msg)
 	}
 	directLink := match[1]
-	DEBUG("Direct link: \"%s\"", directLink)
+	DEBUG(fmt.Sprintf("Direct link: \"%s\"", directLink))
 
 	err = os.MkdirAll(outputDir, 0755)
 	if err != nil {
@@ -75,13 +75,13 @@ func downloadMediafire(url string, outputDir string, chStatus chan int) error {
 
 	filename := matches[0][3]
 	out := filepath.Join(outputDir, filename)
-	DEBUG("Filename: %s", out)
+	DEBUG(fmt.Sprintf("Filename: %s", out))
 
 	f, err := os.OpenFile(out, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0666)
 	if err != nil {
 		// In this case, we may want change the name of the output file depending
 		// on the -overwrite flag.
-		DEBUG("Error opening file %s for writing: %s", out, err)
+		DEBUG(fmt.Sprintf("Error opening file %s for writing: %s", out, err))
 		if *overwrite {
 			f, err = os.Create(out)
 			if err != nil {
@@ -106,12 +106,12 @@ func downloadMediafire(url string, outputDir string, chStatus chan int) error {
 	}
 	defer closeReadCloser(resp2.Body)
 
-	DEBUG("Filename: %s", out)
+	DEBUG("Filename: " + out)
 	wr := bufio.NewWriter(f)
 	sz, err := io.Copy(wr, resp2.Body)
 	if err != nil {
 		return err
 	}
-	INFO("Downloaded %d bytes to\n\t%s\n", sz, out)
+	INFO(fmt.Sprintf("Downloaded %d bytes to\n\t%s\n", sz, out))
 	return nil
 }
