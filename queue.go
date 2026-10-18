@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -18,13 +17,8 @@ func Queue(url string) {
 	filename += "-" + uid.String()
 	filename = filepath.Join(queueDir, filename+".txt")
 	f, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		log.Fatal(err)
-	}
+	FATAL(err)
+	closeFile(f)
 	_, err = f.WriteString(url + "\n")
-	if err != nil {
-		_ = f.Close()
-		log.Fatal(err)
-	}
-	_ = f.Close()
+	FATAL(err)
 }
