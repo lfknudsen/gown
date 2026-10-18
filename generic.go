@@ -52,7 +52,7 @@ func downloadFile(url string, outputDir string) error {
 	defer func(f *os.File) {
 		err := f.Close()
 		if err != nil {
-			DEBUG(err)
+			ERROR(err)
 		}
 	}(f)
 
@@ -63,7 +63,7 @@ func downloadFile(url string, outputDir string) error {
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
 		if err != nil {
-			DEBUG(err)
+			ERROR(err)
 		}
 	}(resp2.Body)
 

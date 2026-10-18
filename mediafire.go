@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -45,7 +44,7 @@ func downloadMediafire(url string, outputDir string, chStatus chan int) error {
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
 		if err != nil {
-			log.Println(err)
+			ERROR(err)
 		}
 	}(resp.Body)
 	if resp.StatusCode != 200 {
@@ -55,14 +54,20 @@ func downloadMediafire(url string, outputDir string, chStatus chan int) error {
 
 	temp, err := os.CreateTemp(os.TempDir(), "*.html")
 	defer func(temp *os.File) {
-		_ = temp.Close()
+		err = temp.Close()
+		if err != nil {
+			ERROR(err)
+		}
 	}(temp)
 
 	_, err = io.Copy(temp, resp.Body)
 	if err != nil {
 		return err
 	}
-	_ = temp.Close()
+	err = temp.Close()
+	if err != nil {
+		ERROR(err)
+	}
 
 	tempFile := temp.Name()
 	html, err := os.ReadFile(tempFile)
@@ -76,7 +81,7 @@ func downloadMediafire(url string, outputDir string, chStatus chan int) error {
 		return errors.New(msg)
 	}
 	directLink := match[1]
-	log.Printf("Direct link: \"%s\"", directLink)
+	DEBUG("Direct link: \"%s\"", directLink)
 
 	err = os.MkdirAll(outputDir, 0755)
 	if err != nil {
@@ -85,11 +90,11 @@ func downloadMediafire(url string, outputDir string, chStatus chan int) error {
 
 	filename := matches[0][3]
 	out := filepath.Join(outputDir, filename)
-	log.Printf("Filename: %s", out)
+	DEBUG("Filename: %s", out)
 
 	f, err := os.OpenFile(out, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0666)
 	if err != nil {
-		log.Printf("Error opening file %s for writing: %s", out, err)
+		DEBUG("Error opening file %s for writing: %s", out, err)
 		if *overwrite {
 			f, err = os.Create(out)
 			if err != nil {
@@ -109,7 +114,7 @@ func downloadMediafire(url string, outputDir string, chStatus chan int) error {
 	defer func(f *os.File) {
 		err := f.Close()
 		if err != nil {
-			log.Println(err)
+			ERROR(err)
 		}
 	}(f)
 
@@ -120,16 +125,16 @@ func downloadMediafire(url string, outputDir string, chStatus chan int) error {
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
 		if err != nil {
-			log.Println(err)
+			ERROR(err)
 		}
 	}(resp2.Body)
 
-	log.Printf("Filename: %s", out)
+	DEBUG("Filename: %s", out)
 	wr := bufio.NewWriter(f)
 	sz, err := io.Copy(wr, resp2.Body)
 	if err != nil {
 		return err
 	}
-	log.Printf("Downloaded %d bytes to\n\t%s\n", sz, out)
+	INFO("Downloaded %d bytes to\n\t%s\n", sz, out)
 	return nil
 }

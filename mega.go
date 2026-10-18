@@ -30,12 +30,15 @@ func downloadMega(url string, outputDir string) error {
 	idx := strings.IndexRune(matches[idSection], '#')
 	folderName := matches[idSection][:idx]
 	outputDir = filepath.Join(outputDir, dirMega, folderName)
-	_ = os.MkdirAll(outputDir, 0755)
+	err := os.MkdirAll(outputDir, 0755)
+	if err != nil {
+		return err
+	}
 
 	cmd := exec.Command("megatools", "dl", "--no-progress", "--path", outputDir, url)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	err := cmd.Start()
+	err = cmd.Start()
 	if err != nil {
 		return err
 	}
