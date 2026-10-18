@@ -18,14 +18,39 @@ Downloading from Mega requires `megatools`.
 
 ## Build
 
+The project can build three separate executables, though all functionality can
+be reached with the main `gown`, located in `cmd\gown`:
+
 ```
-go build
+go build -C cmd/gown [-o <output file-path>]
+```
+
+To build the other utilities:
+```
+go build -C cmd/queue [-o <output file-path>]
+go build -C cmd/gown-srv [-o <output file-path>]
+```
+
+A Makefile exists to ease the build process. Some of the recipes (including `all`)
+rely on my "[install](https://gitlab.com/lfknudsen/install)" programme.
+
+```
+make
 ```
 
 ## Usage
-
 ```
 gown [OPTIONS] <URLs...>
+            Downloads the given URL(s).
+
+gown [OPTIONS] queue <URLs...>
+queue [OPTIONS] <URLs...>
+            Saves the URL(s) to timestamped files in the 'gown/queue' directory.
+
+gown [OPTIONS] interactive
+gown-srv [OPTIONS]
+            Launches an interactive shell which allows you to repeatedly
+            input and download URLs.
 
 Options:
 -h | --help         Print help message and exit.
@@ -43,11 +68,12 @@ Options:
                     Default: false.
 ```
 
-Whether you prefix arguments with one or two dashes is irrelevant.
+Whether you prefix options with one or two dashes is irrelevant.
 
 ## Supported websites
 
 GitLab.com, GitHub.com, any website that ends in .git\
 Mediafire.com\
 DeviantArt, and anything else supported by `gallery-dl`\
-YouTube, and anything else supported by `yt-dlp`
+YouTube, and anything else supported by `yt-dlp`\
+Mega.nz
