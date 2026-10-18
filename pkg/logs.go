@@ -9,21 +9,25 @@ import (
 	"uuid"
 )
 
-func InitialiseLogging() {
-	InitialiseDirectories(LogDir)
-	wr, err := os.OpenFile(LogFile, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
-	FATAL(err)
+func CloseLogFile(writer *os.File) {
 	defer func() {
-		if wr != nil {
+		if writer != nil {
 			DEBUG("Closing log file")
-			err = wr.Close()
+			err := writer.Close()
 			FATAL(err)
 		}
 	}()
-	logWriter := bufio.NewWriter(wr)
+}
+
+func InitialiseLogging() *os.File {
+	InitialiseDirectories(LogDir)
+	writer, err := os.OpenFile(LogFile, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
+	FATAL(err)
+	logWriter := bufio.NewWriter(writer)
 	log.SetOutput(logWriter)
 	log.SetFlags(log.Lmicroseconds | log.LstdFlags)
 	DEBUG("Finished setting up log file.")
+	return writer
 }
 
 func DEBUG(msg any) {

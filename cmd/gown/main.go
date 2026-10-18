@@ -8,7 +8,8 @@ import (
 )
 
 func main() {
-	InitialiseLogging()
+	logFile := InitialiseLogging()
+	defer CloseLogFile(logFile)
 	flag.Usage = PrintHelp
 	flag.Parse()
 	DEBUG("Parsed command-line flags.")
@@ -31,6 +32,11 @@ func main() {
 
 	if flag.Args()[0] == "queue" {
 		Queue(flag.Args()[1:]...)
+		os.Exit(0)
+	}
+
+	if len(flag.Args()) >= 1 && flag.Args()[0] == "interactive" {
+		Interactive()
 		os.Exit(0)
 	}
 

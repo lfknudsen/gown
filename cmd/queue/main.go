@@ -6,7 +6,8 @@ import (
 )
 
 func main() {
-	InitialiseLogging()
+	logFile := InitialiseLogging()
+	defer CloseLogFile(logFile)
 	flag.Parse()
 	Queue(flag.Args()...)
 }
