@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 	"time"
 	"uuid"
@@ -110,11 +111,6 @@ func ListPrompt() {
 		elements = append(elements, url)
 	}
 
-	promptList := promptui.Select{
-		Label:     "Select queue element",
-		Items:     elements,
-		IsVimMode: false,
-	}
 	promptAction := promptui.Select{
 		Label:     "Select action",
 		Items:     []string{"Download", "Delete", "Cancel"},
@@ -125,7 +121,12 @@ func ListPrompt() {
 	var actionIndex int = -1
 	scrollPosition := 0
 	for {
-		entryIndex, _, err = promptList.RunCursorAt(scrollPosition, entryIndex)
+		promptList := promptui.Select{
+			Label:     "Select queue element",
+			Items:     elements,
+			IsVimMode: false,
+		}
+		entryIndex, _, err = promptList.RunCursorAt(entryIndex, scrollPosition)
 		if err != nil {
 			return
 		}
@@ -135,8 +136,10 @@ func ListPrompt() {
 			switch actionIndex {
 			case 0:
 				Download(elements[entryIndex], ChStatus)
+				elements = slices.Delete(elements, entryIndex, entryIndex+1)
 				_ = trash.Throw(filepath.Join(QueueDir, entries[entryIndex].Name()))
 			case 1:
+				elements = slices.Delete(elements, entryIndex, entryIndex+1)
 				_ = trash.Throw(filepath.Join(QueueDir, entries[entryIndex].Name()))
 			}
 		}
