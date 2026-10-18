@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	"regexp"
 	"strings"
 	"sync"
@@ -12,7 +13,16 @@ import (
 	"github.com/Microsoft/go-winio/pkg/guid"
 )
 
-var outputDir string = "downloads"
+func getExecutableDir() string {
+	ex, err := os.Executable()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return filepath.Dir(ex)
+}
+
+var root = getExecutableDir()
+var outputDir string = filepath.Join(root, "downloads")
 
 var chStatus = make(chan int, 1)
 
