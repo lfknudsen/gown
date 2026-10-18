@@ -17,7 +17,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	InitialiseDirectories(OutputDir, QueueDir)
+	SetupDirs()
 
 	if *GenerateLists {
 		GenerateGalleryList()
