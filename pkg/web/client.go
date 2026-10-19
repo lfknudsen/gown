@@ -32,12 +32,12 @@ func NewGownClient(port int) (client *GownClient) {
 func (client *GownClient) RequestDownload(url string) {
 	id := uuid.New().String()
 	link := listen.Link{
-		Id:    &id,
-		Url:   &url,
-		Token: &client.token,
+		Id:    id,
+		Url:   url,
+		Token: client.token,
 	}
 	var callOpts []grpc.CallOption
 	reply, err := client.speaker.Download(context.Background(), &link, callOpts...)
 	pkg.FATAL(err)
-	fmt.Println("Is the download finished? ", *reply.Finished)
+	fmt.Println("Is the download finished? ", reply.Finished)
 }
