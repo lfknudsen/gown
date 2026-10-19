@@ -4,6 +4,7 @@ option go_package = "./listen";
 
 service Listener {
   rpc Download(Link) returns (Reply) {}
+  rpc Queue(Link) returns (Confirmation) {}
 }
 
 message Link {
@@ -14,4 +15,8 @@ message Link {
 
 message Reply {
   bool Finished = 1;
+}
+
+message Confirmation {
+  bool added = 1;
 }
