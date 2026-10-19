@@ -102,6 +102,8 @@ func ListPrompt() {
 		return
 	}
 	elements := make([]string, 0, len(entries))
+	maxLength := 0
+	// Build array of the URLs contained within the queue files.
 	for _, entry := range entries {
 		path := filepath.Join(QueueDir, entry.Name())
 		data, err := os.ReadFile(path)
@@ -109,7 +111,22 @@ func ListPrompt() {
 			ERROR(err)
 		}
 		url := strings.TrimSpace(string(data))
+		if maxLength < len(url) {
+			maxLength = len(url)
+		}
 		elements = append(elements, url)
+	}
+	if *PrintTitle {
+		// Padding
+		maxLength += 3
+		// Concatenate each URL with its page title
+		for i := range elements {
+			title, err := query(elements[i], "title")
+			if err != nil {
+				continue
+			}
+			elements[i] = elements[i] + strings.Repeat(" ", maxLength-len(elements[i])) + title
+		}
 	}
 
 	promptAction := promptui.Select{

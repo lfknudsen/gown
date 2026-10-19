@@ -24,6 +24,8 @@ var RetriesStr = strconv.Itoa(*Retries)
 
 var Port = flag.Int("port", 8080, "The port to connect or listen to.")
 
+var PrintTitle = flag.Bool("title", false, "When listing the queue, print each link's HTML title.")
+
 func PrintHelp() {
 	fmt.Printf("Gown v%s\n\nUsage: %s [OPTIONS] <URL(s)...>\n\nOptions:\n", VERSION, os.Args[0])
 	flag.PrintDefaults()
