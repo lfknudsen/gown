@@ -14,6 +14,8 @@ func Interactive(urlHandler func(string, chan int) error) {
 	for err == nil {
 		line = strings.TrimSpace(line)
 		switch line {
+		case "":
+			break
 		case "exit", "quit":
 			return
 		default:
@@ -22,8 +24,8 @@ func Interactive(urlHandler func(string, chan int) error) {
 				err = urlHandler(url, ChStatus)
 				ERROR(err)
 			}
-			line, err = instance.Readline()
 		}
+		line, err = instance.Readline()
 
 	}
 	fmt.Println(err)
