@@ -67,8 +67,10 @@ func DownloadQueue() {
 			continue
 		}
 		url := strings.TrimSpace(string(data))
-		Download(url, chStatus)
-		err = trash.Throw(path)
+		err = DownloadFromQueue(url, chStatus)
+		if err == nil {
+			_ = trash.Throw(path)
+		}
 		ERROR(err)
 	}
 }
@@ -135,9 +137,11 @@ func ListPrompt() {
 		if actionIndex >= 0 {
 			switch actionIndex {
 			case 0:
-				Download(elements[entryIndex], ChStatus)
-				elements = slices.Delete(elements, entryIndex, entryIndex+1)
-				_ = trash.Throw(filepath.Join(QueueDir, entries[entryIndex].Name()))
+				err = DownloadFromQueue(elements[entryIndex], ChStatus)
+				if err == nil {
+					elements = slices.Delete(elements, entryIndex, entryIndex+1)
+					_ = trash.Throw(filepath.Join(QueueDir, entries[entryIndex].Name()))
+				}
 			case 1:
 				elements = slices.Delete(elements, entryIndex, entryIndex+1)
 				_ = trash.Throw(filepath.Join(QueueDir, entries[entryIndex].Name()))

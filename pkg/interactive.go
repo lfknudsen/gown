@@ -7,7 +7,7 @@ import (
 	"github.com/lmorg/readline/v4"
 )
 
-func Interactive(urlHandler func(string, chan int)) {
+func Interactive(urlHandler func(string, chan int) error) {
 	instance := readline.NewInstance()
 	instance.SetPrompt(">> URL: ")
 	line, err := instance.Readline()
@@ -19,7 +19,8 @@ func Interactive(urlHandler func(string, chan int)) {
 		default:
 			urls := strings.Split(line, " ")
 			for _, url := range urls {
-				urlHandler(url, ChStatus)
+				err = urlHandler(url, ChStatus)
+				ERROR(err)
 			}
 			line, err = instance.Readline()
 		}

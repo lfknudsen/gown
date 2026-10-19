@@ -26,8 +26,9 @@ func (s *Server) Serve(server *grpc.Server, lis net.Listener, wait chan struct{}
 }
 
 func (s *Server) Download(_ context.Context, link *Link) (*Reply, error) {
-	pkg.Download(link.GetUrl(), make(chan int))
-	finished := true
+	err := pkg.Download(link.GetUrl(), make(chan int))
+	pkg.ERROR(err)
+	finished := err == nil
 	return &Reply{
 		Finished: &finished,
 	}, nil

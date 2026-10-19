@@ -61,12 +61,16 @@ func main() {
 
 	if *Singlethreaded {
 		for _, url := range flag.Args() {
-			Download(url, ChStatus)
+			err := Download(url, ChStatus)
+			ERROR(err)
 		}
 	} else {
 		wait := sync.WaitGroup{}
 		for _, url := range flag.Args() {
-			wait.Go(func() { Download(url, ChStatus) })
+			wait.Go(func() {
+				err := Download(url, ChStatus)
+				ERROR(err)
+			})
 		}
 		wait.Wait()
 	}
