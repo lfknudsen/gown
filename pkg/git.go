@@ -2,6 +2,7 @@ package pkg
 
 import (
 	"fmt"
+	"gown/pkg/util"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -33,7 +34,7 @@ func DownloadGit(url string) error {
 	if len(subs) <= 1 {
 		return fmt.Errorf("invalid git url: %s", url)
 	}
-	name := UrlStem(subs[1])
+	name := util.UrlStem(subs[1])
 	dir := filepath.Join(RepoDir, name)
 	cmd := exec.Command("git", "clone", url, dir)
 	return cmd.Run()

@@ -2,6 +2,7 @@ package pkg
 
 import (
 	"bufio"
+	"gown/pkg/util"
 	"io"
 	"net/http"
 	"os"
@@ -36,7 +37,7 @@ func matchesGallery(url string) bool {
 	}
 	defer closeFile(f)
 	scanner := bufio.NewScanner(f)
-	url = UrlRoot(url)
+	url = util.UrlRoot(url)
 	for scanner.Scan() {
 		if scanner.Text() == url {
 			return true

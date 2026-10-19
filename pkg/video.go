@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
+	"gown/pkg/util"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -72,7 +73,7 @@ func matchesVideo(url string) bool {
 	}
 	defer closeFile(f)
 	scanner := bufio.NewScanner(f)
-	url = UrlStem(url)
+	url = util.UrlStem(url)
 	for scanner.Scan() {
 		if scanner.Text() == url {
 			return true

@@ -4,6 +4,7 @@ import (
 	"crypto/md5"
 	"errors"
 	"fmt"
+	"gown/pkg/util"
 	"os"
 	"path/filepath"
 	"slices"
@@ -20,7 +21,7 @@ func Queue(url ...string) error {
 		hasher := md5.New()
 		hasher.Write([]byte(url))
 		hashOfURL := hasher.Sum(nil)
-		filename := fmt.Sprintf("%s-%x", TimeStamp(), hashOfURL)
+		filename := fmt.Sprintf("%s-%x", util.TimeStamp(), hashOfURL)
 		filename = filepath.Join(QueueDir, filename+".txt")
 		f, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 		if err != nil {

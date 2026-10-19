@@ -3,6 +3,7 @@ package pkg
 import (
 	"bufio"
 	"fmt"
+	"gown/pkg/util"
 	"log"
 	"os"
 	"path/filepath"
@@ -86,4 +87,4 @@ const logDirName = "logs"
 
 var LogDir = filepath.Join(GownDirectory, logDirName)
 
-var LogFile = filepath.Join(LogDir, TimeStamp()+"log_"+uuid.New().String()+".txt")
+var LogFile = filepath.Join(LogDir, util.TimeStamp()+"log_"+uuid.New().String()+".txt")
