@@ -23,9 +23,9 @@ const (
 
 type Link struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            *string                `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
-	Token         *string                `protobuf:"bytes,2,opt,name=token" json:"token,omitempty"`
-	Url           *string                `protobuf:"bytes,3,opt,name=url" json:"url,omitempty"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Token         string                 `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`
+	Url           string                 `protobuf:"bytes,3,opt,name=url,proto3" json:"url,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -61,29 +61,29 @@ func (*Link) Descriptor() ([]byte, []int) {
 }
 
 func (x *Link) GetId() string {
-	if x != nil && x.Id != nil {
-		return *x.Id
+	if x != nil {
+		return x.Id
 	}
 	return ""
 }
 
 func (x *Link) GetToken() string {
-	if x != nil && x.Token != nil {
-		return *x.Token
+	if x != nil {
+		return x.Token
 	}
 	return ""
 }
 
 func (x *Link) GetUrl() string {
-	if x != nil && x.Url != nil {
-		return *x.Url
+	if x != nil {
+		return x.Url
 	}
 	return ""
 }
 
 type Reply struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Finished      *bool                  `protobuf:"varint,1,opt,name=Finished" json:"Finished,omitempty"`
+	Finished      bool                   `protobuf:"varint,1,opt,name=Finished,proto3" json:"Finished,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -119,8 +119,8 @@ func (*Reply) Descriptor() ([]byte, []int) {
 }
 
 func (x *Reply) GetFinished() bool {
-	if x != nil && x.Finished != nil {
-		return *x.Finished
+	if x != nil {
+		return x.Finished
 	}
 	return false
 }
@@ -138,7 +138,7 @@ const file_proto_listen_proto_rawDesc = "" +
 	"\bFinished\x18\x01 \x01(\bR\bFinished2'\n" +
 	"\bListener\x12\x1b\n" +
 	"\bDownload\x12\x05.Link\x1a\x06.Reply\"\x00B\n" +
-	"Z\b./listenb\beditionsp\xe8\a"
+	"Z\b./listenb\x06proto3"
 
 var (
 	file_proto_listen_proto_rawDescOnce sync.Once
