@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	. "gown/pkg"
 	. "gown/pkg/web"
 )
@@ -18,13 +19,12 @@ func main() {
 	}
 
 	wait := StartServer(*Port)
-	Interactive(Download)
+	fmt.Println()
+	Interactive()
 	for {
 		select {
 		case <-wait:
-			return
+			DEBUG("Done")
 		}
 	}
-
-	DEBUG("Done")
 }

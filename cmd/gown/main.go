@@ -41,7 +41,7 @@ func main() {
 	}
 
 	if len(flag.Args()) >= 1 && flag.Args()[0] == "interactive" {
-		Interactive(Download)
+		Interactive()
 		os.Exit(0)
 	}
 
