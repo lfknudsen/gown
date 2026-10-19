@@ -46,6 +46,9 @@ func download(url string, chStatus chan int) error {
 		// Fallback
 		err = downloadFile(url, OutputDir)
 	}
+	if err == nil {
+		WARN("Finished downloading " + url)
+	}
 	return err
 }
 
