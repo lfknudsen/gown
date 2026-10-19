@@ -28,10 +28,17 @@ func (s *Server) Serve(server *grpc.Server, lis net.Listener, wait chan struct{}
 func (s *Server) Download(_ context.Context, link *Link) (*Reply, error) {
 	err := pkg.Download(link.GetUrl(), make(chan int))
 	pkg.ERROR(err)
-	finished := err == nil
 	return &Reply{
-		Finished: &finished,
-	}, nil
+		Finished: err == nil,
+	}, err
+}
+
+func (s *Server) Queue(_ context.Context, link *Link) (*Confirmation, error) {
+	err := pkg.Queue(link.GetUrl())
+	pkg.ERROR(err)
+	return &Confirmation{
+		Added: err == nil,
+	}, err
 }
 
 func StartServer(port int) chan struct{} {
