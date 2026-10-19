@@ -15,7 +15,7 @@ import (
 
 var QueueDir string = filepath.Join(GownDirectory, "queue")
 
-func Queue(url ...string) {
+func Queue(url ...string) error {
 	for _, url := range url {
 		hasher := md5.New()
 		hasher.Write([]byte(url))
@@ -23,12 +23,17 @@ func Queue(url ...string) {
 		filename := fmt.Sprintf("%s-%x", TimeStamp(), hashOfURL)
 		filename = filepath.Join(QueueDir, filename+".txt")
 		f, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-		FATAL(err)
+		if err != nil {
+			return err
+		}
 		_, err = f.WriteString(url + "\n")
 		closeFile(f)
-		FATAL(err)
+		if err != nil {
+			return err
+		}
 		WARN(fmt.Sprintf("Added to queue: %s", url))
 	}
+	return nil
 }
 
 func GetFirst() (string, error) {

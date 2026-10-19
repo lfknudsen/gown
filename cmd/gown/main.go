@@ -34,7 +34,8 @@ func main() {
 		} else if len(flag.Args()) == 2 && flag.Args()[1] == "list" {
 			ListPrompt()
 		} else {
-			Queue(flag.Args()[1:]...)
+			err := Queue(flag.Args()[1:]...)
+			FATAL(err)
 		}
 		os.Exit(0)
 	}

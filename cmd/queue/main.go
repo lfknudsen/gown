@@ -36,7 +36,8 @@ func main() {
 		os.Exit(0)
 	}
 
-	Queue(flag.Args()...)
+	err := Queue(flag.Args()...)
+	FATAL(err)
 
 	DEBUG("Done")
 }
