@@ -7,7 +7,6 @@ import (
 	"path/filepath"
 	"slices"
 	"strings"
-	"time"
 	"uuid"
 
 	"github.com/hymkor/trash-go"
@@ -18,8 +17,7 @@ var QueueDir string = filepath.Join(GownDirectory, "queue")
 
 func Queue(url ...string) {
 	for _, url := range url {
-		filename := time.Now().UTC().Format(time.RFC3339)
-		filename = strings.Replace(filename, ":", "_", -1)
+		filename := TimeStamp()
 		uid := uuid.New()
 		filename += "-" + uid.String()
 		filename = filepath.Join(QueueDir, filename+".txt")

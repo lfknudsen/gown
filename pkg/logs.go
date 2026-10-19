@@ -10,13 +10,11 @@ import (
 )
 
 func CloseLogFile(writer *os.File) {
-	defer func() {
-		if writer != nil {
-			DEBUG("Closing log file")
-			err := writer.Close()
-			FATAL(err)
-		}
-	}()
+	if writer != nil {
+		DEBUG("Closing log file")
+		err := writer.Close()
+		FATAL(err)
+	}
 }
 
 func InitialiseLogging() *os.File {
@@ -88,4 +86,4 @@ const logDirName = "logs"
 
 var LogDir = filepath.Join(GownDirectory, logDirName)
 
-var LogFile = filepath.Join(LogDir, "log_"+uuid.New().String()+".txt")
+var LogFile = filepath.Join(LogDir, TimeStamp()+"log_"+uuid.New().String()+".txt")
