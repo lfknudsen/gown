@@ -30,7 +30,7 @@ func FmtUrl(url string) string {
 }
 
 func download(url string, chStatus chan int) error {
-	DEBUG("Downloading " + url)
+	WARN("Downloading " + url)
 	var err error = nil
 	if strings.Contains(url, "mediafire.com") {
 		err = downloadMediafire(url, OutputDir, chStatus)
