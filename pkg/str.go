@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+	"time"
 )
 
 func UrlStem(s string) string {
@@ -29,4 +30,9 @@ func Ext(s string) string {
 // So "https://www.duckduckgo.com/search?" would become "duckduckgo.com"
 func UrlRoot(s string) string {
 	return regexp.MustCompile(`(?:https?://)?(?:ww[w\d]*\.)?([^/]+).*`).FindStringSubmatch(s)[1]
+}
+
+func TimeStamp() string {
+	out := time.Now().UTC().Format(time.RFC3339)
+	return strings.Replace(out, ":", "_", -1)
 }
