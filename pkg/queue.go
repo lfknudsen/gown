@@ -127,9 +127,16 @@ func ListPrompt() {
 		maxLength += 3
 		// Concatenate each URL with its page title
 		for i := range elements {
-			title, err := query(elements[i], "title")
-			if err != nil {
-				continue
+			// If the URL contains a filename, it possibly won't have an HTML page,
+			// but also, you'll already be able to tell what the URL points to.
+			title := ""
+			if strings.ContainsRune(elements[i], '.') {
+				title = path.Base(elements[i])
+			} else {
+				title, err = query(elements[i], "title")
+				if err != nil {
+					continue
+				}
 			}
 			elements[i] = elements[i] + strings.Repeat(" ", maxLength-len(elements[i])) + title
 		}
