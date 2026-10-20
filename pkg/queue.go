@@ -149,6 +149,7 @@ func ListPrompt() {
 			Label:     "Select queue element",
 			Items:     elements,
 			IsVimMode: false,
+			Size:      10,
 		}
 		entryIndex, _, err = promptList.RunCursorAt(entryIndex, scrollPosition)
 		if err != nil {
