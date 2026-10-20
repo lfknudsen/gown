@@ -12,6 +12,7 @@ func interactiveHelp() {
 	fmt.Println("Commands:\n" +
 		"download <URL(s)...>    Download the given URL(s).\n" +
 		"queue <URL(s)...>       Add the given URL(s) to the queue.\n" +
+		"list					 List the contents of the queue.\n" +
 		"help                    Print this message (alias: h).\n" +
 		"exit                    Close the programme (aliases: quit, q, :q).")
 }
@@ -43,6 +44,8 @@ func Interactive() {
 				err = Queue(url)
 				ERROR(err)
 			}
+		case "list":
+			ListPrompt()
 		default:
 			fmt.Println("Unknown command. Try typing 'help' (without quotes).")
 		}
