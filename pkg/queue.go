@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"gown/pkg/util"
 	"os"
+	"path"
 	"path/filepath"
 	"slices"
 	"strings"
@@ -49,6 +50,14 @@ func GetFirst() (string, error) {
 	return string(data), err
 }
 
+// getQueueItem opens the file with the given filename (not path!) in the queue directory,
+// and returns its contents as a string.
+func getQueueItem(filename string) (string, error) {
+	filename = filepath.Join(QueueDir, filename)
+	data, err := os.ReadFile(filename)
+	return string(data), err
+}
+
 func DownloadQueue() {
 	entries, err := os.ReadDir(QueueDir)
 	FATAL(err)
@@ -65,8 +74,8 @@ func DownloadQueue() {
 		if !info.Mode().IsRegular() {
 			continue
 		}
-		path := filepath.Join(QueueDir, entry.Name())
-		data, err := os.ReadFile(path)
+		filePath := filepath.Join(QueueDir, entry.Name())
+		data, err := os.ReadFile(filePath)
 		if err != nil {
 			ERROR(err)
 			continue
@@ -74,7 +83,7 @@ func DownloadQueue() {
 		url := strings.TrimSpace(string(data))
 		err = DownloadFromQueue(url, chStatus)
 		if err == nil {
-			_ = trash.Throw(path)
+			_ = trash.Throw(filePath)
 		}
 		ERROR(err)
 	}
@@ -88,8 +97,7 @@ func ListQueue() {
 		return
 	}
 	for _, entry := range entries {
-		path := filepath.Join(QueueDir, entry.Name())
-		data, err := os.ReadFile(path)
+		data, err := getQueueItem(entry.Name())
 		if err != nil {
 			ERROR(err)
 			continue
@@ -99,6 +107,9 @@ func ListQueue() {
 	}
 }
 
+// ListPrompt opens an interactive list of the queue. The user
+// can download or delete individual entries.
+// Each entry will be shown as "<URL>   <Page title>"
 func ListPrompt() {
 	var err error
 	entries, err := os.ReadDir(QueueDir)
@@ -111,10 +122,11 @@ func ListPrompt() {
 	maxLength := 0
 	// Build array of the URLs contained within the queue files.
 	for _, entry := range entries {
-		path := filepath.Join(QueueDir, entry.Name())
-		data, err := os.ReadFile(path)
+		data, err := getQueueItem(entry.Name())
 		if err != nil {
+			// Couldn't find/read a file with the given name.
 			ERROR(err)
+			continue
 		}
 		url := strings.TrimSpace(string(data))
 		if maxLength < len(url) {
