@@ -48,9 +48,10 @@ gown [OPTIONS] queue <URLs...>
 queue [OPTIONS] <URLs...>
             Saves the URL(s) to timestamped files in the 'gown/queue' directory.
 
-gown queue download
-queue download
-            Downloads the files in the queue.
+gown queue download [<number>]
+queue download [<number>]
+            Downloads the files in the queue. If <number> is included, will download
+            the first <number> of entries in the queue.
 
 gown queue list
 queue list
