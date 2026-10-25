@@ -2,10 +2,13 @@ package main
 
 import (
 	"flag"
+	"fmt"
+	"os"
+	"strconv"
+	"sync"
+
 	. "gown/pkg"
 	"gown/pkg/web"
-	"os"
-	"sync"
 )
 
 func main() {
@@ -31,6 +34,17 @@ func main() {
 	if flag.Args()[0] == "queue" {
 		if len(flag.Args()) == 2 && flag.Args()[1] == "download" {
 			DownloadQueue()
+		} else if len(flag.Args()) == 3 && flag.Args()[1] == "download" {
+			num, err := strconv.ParseUint(flag.Args()[2], 10, 64)
+			if err != nil {
+				if *Verbose >= 1 {
+					_, _ = fmt.Fprintf(os.Stderr,
+						"Expected an integer argument, but got %s",
+						flag.Args()[1])
+				}
+				os.Exit(1)
+			}
+			DownloadFirstN(num)
 		} else if len(flag.Args()) == 2 && flag.Args()[1] == "list" {
 			ListPrompt()
 		} else {
@@ -61,6 +75,10 @@ func main() {
 	}
 
 	if *Singlethreaded {
+		for _, url := range flag.Args() {
+			err := AddToInProgressQueue(url)
+			ERROR(err)
+		}
 		for _, url := range flag.Args() {
 			err := Download(url, ChStatus)
 			ERROR(err)
