@@ -4,12 +4,13 @@ import (
 	"crypto/md5"
 	"errors"
 	"fmt"
-	"gown/pkg/util"
 	"os"
 	"path"
 	"path/filepath"
 	"slices"
 	"strings"
+
+	"gown/pkg/util"
 
 	"github.com/hymkor/trash-go"
 	"github.com/manifoldco/promptui"
@@ -79,6 +80,39 @@ func DownloadQueue() {
 			continue
 		}
 		filePath := filepath.Join(QueueDir, entry.Name())
+		data, err := os.ReadFile(filePath)
+		if err != nil {
+			ERROR(err)
+			continue
+		}
+		url := strings.TrimSpace(string(data))
+		err = DownloadFromQueue(url, chStatus)
+		if err == nil {
+			_ = trash.Throw(filePath)
+		}
+		ERROR(err)
+	}
+}
+
+func DownloadFirstN(n uint64) {
+	entries, err := os.ReadDir(QueueDir)
+	FATAL(err)
+	if len(entries) == 0 {
+		return
+	}
+	chStatus := make(chan int)
+	var i uint64 = 0
+	var length = uint64(len(entries))
+	for ; i < n && i < length; i++ {
+		info, err := entries[i].Info()
+		if err != nil {
+			ERROR(err)
+			continue
+		}
+		if !info.Mode().IsRegular() {
+			continue
+		}
+		filePath := filepath.Join(QueueDir, entries[i].Name())
 		data, err := os.ReadFile(filePath)
 		if err != nil {
 			ERROR(err)
