@@ -42,6 +42,8 @@ func download(url string, chStatus chan int) error {
 		err = DownloadVideo(url, OutputDir)
 	} else if matchesMegaURL(url) {
 		err = downloadMega(url)
+	} else if strings.Contains(url, "instagram.com") {
+		err = DownloadInstagram(url)
 	} else {
 		// Fallback
 		err = downloadFile(url, OutputDir)
