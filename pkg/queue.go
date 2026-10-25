@@ -102,8 +102,12 @@ func DownloadFirstN(n uint64) {
 	}
 	chStatus := make(chan int)
 	var i uint64 = 0
-	var length = uint64(len(entries))
-	for ; i < n && i < length; i++ {
+	var maximum = uint64(len(entries))
+	if maximum > n {
+		maximum = n
+	}
+	for ; i < maximum; i++ {
+		fmt.Printf("%s: ", util.FormatFractionU(i+1, maximum))
 		info, err := entries[i].Info()
 		if err != nil {
 			ERROR(err)
