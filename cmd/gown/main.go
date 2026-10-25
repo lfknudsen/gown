@@ -8,6 +8,7 @@ import (
 	"sync"
 
 	. "gown/pkg"
+	"gown/pkg/util"
 	"gown/pkg/web"
 )
 
@@ -75,11 +76,8 @@ func main() {
 	}
 
 	if *Singlethreaded {
-		for _, url := range flag.Args() {
-			err := AddToInProgressQueue(url)
-			ERROR(err)
-		}
-		for _, url := range flag.Args() {
+		for i, url := range flag.Args() {
+			fmt.Printf("(%s) ", util.FormatFraction(i+1, len(flag.Args())))
 			err := Download(url, ChStatus)
 			ERROR(err)
 		}
