@@ -14,7 +14,8 @@ websites they support. You will need the executables/scripts to be on your PATH:
 Cloning Git repositories requires `git`.\
 Downloading from DeviantArt (and other gallery websites) requires `gallery-dl`.\
 Downloading from YouTube (and other video websites) requires `yt-dlp`.\
-Downloading from Mega requires `megatools`.
+Downloading from Mega requires `megatools`.\
+Downloading from Instagram requires `instaloader`
 
 ## Build
 
@@ -106,4 +107,5 @@ GitLab.com, GitHub.com, any website that ends in .git\
 Mediafire.com\
 DeviantArt, and anything else supported by `gallery-dl`\
 YouTube, and anything else supported by `yt-dlp`\
-Mega.nz
+Mega.nz,
+Instagram.com (individual posts)
