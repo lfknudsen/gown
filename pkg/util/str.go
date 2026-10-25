@@ -45,3 +45,15 @@ func FormatFractionU(left, right uint64) string {
 	prefix := strings.Repeat(" ", difference)
 	return prefix + l + "/" + r
 }
+
+func FormatFractionL(left, right int64) string {
+	l := strconv.FormatInt(left, 10)
+	r := strconv.FormatInt(right, 10)
+	difference := len(r) - len(l)
+	prefix := strings.Repeat(" ", difference)
+	return prefix + l + "/" + r
+}
+
+func FormatFraction(left, right int) string {
+	return FormatFractionL(int64(left), int64(right))
+}
