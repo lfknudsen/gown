@@ -4,6 +4,7 @@ import (
 	"path"
 	"path/filepath"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -35,4 +36,12 @@ func UrlRoot(s string) string {
 func TimeStamp() string {
 	out := time.Now().UTC().Format(time.RFC3339)
 	return strings.Replace(out, ":", "_", -1)
+}
+
+func FormatFractionU(left, right uint64) string {
+	l := strconv.FormatUint(left, 10)
+	r := strconv.FormatUint(right, 10)
+	difference := len(r) - len(l)
+	prefix := strings.Repeat(" ", difference)
+	return prefix + l + "/" + r
 }
