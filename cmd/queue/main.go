@@ -2,8 +2,11 @@ package main
 
 import (
 	"flag"
-	. "gown/pkg"
+	"fmt"
 	"os"
+	"strconv"
+
+	. "gown/pkg"
 )
 
 func main() {
@@ -28,6 +31,20 @@ func main() {
 
 	if len(flag.Args()) == 1 && flag.Args()[0] == "download" {
 		DownloadQueue()
+		os.Exit(0)
+	}
+
+	if len(flag.Args()) == 2 && flag.Args()[0] == "download" {
+		num, err := strconv.ParseUint(flag.Args()[1], 10, 64)
+		if err != nil {
+			if *Verbose >= 1 {
+				_, _ = fmt.Fprintf(os.Stderr,
+					"Expected an integer argument, but got %s",
+					flag.Args()[1])
+			}
+			os.Exit(1)
+		}
+		DownloadFirstN(num)
 		os.Exit(0)
 	}
 
