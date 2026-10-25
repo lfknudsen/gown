@@ -29,9 +29,18 @@ func downloadMega(url string) error {
 		return errors.New(fmt.Sprintf("weirdly formatted MEGA URL: %s", url))
 	}
 	idSection := len(matches) - 1
-	idx := strings.IndexRune(matches[idSection], '#')
-	folderName := matches[idSection][:idx]
-	outputDir := filepath.Join(DirMega, folderName)
+	folders := strings.Split(matches[idSection], "/folder/")
+	dirStructure := make([]string, 0, len(folders))
+	for _, folder := range folders {
+		folderName := folder
+		idx := strings.IndexRune(folder, '#')
+		if idx != -1 {
+			folderName = folder[:idx]
+		}
+		dirStructure = append(dirStructure, folderName)
+	}
+	outputDir := filepath.Join(dirStructure...)
+	outputDir = filepath.Join(DirMega, outputDir)
 	err := os.MkdirAll(outputDir, 0755)
 	if err != nil {
 		return err
