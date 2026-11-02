@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-const VERSION = "0.3.1"
+const VERSION = "0.4.0"
 
 func getExecutableDir() string {
 	ex, err := os.Executable()
@@ -15,8 +15,16 @@ func getExecutableDir() string {
 	return filepath.Dir(ex)
 }
 
+func determineGownDir() string {
+	gownDir := os.Getenv("GOWN_DIR")
+	if gownDir == "" {
+		return filepath.Join(ExecutableDir, "gown")
+	}
+	return gownDir
+}
+
 var ExecutableDir = getExecutableDir()
-var GownDirectory = filepath.Join(ExecutableDir, "gown")
+var GownDirectory = determineGownDir()
 var OutputDir = filepath.Join(GownDirectory, "downloads")
 var DataDir = filepath.Join(GownDirectory, "data")
 
