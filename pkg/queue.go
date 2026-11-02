@@ -157,7 +157,7 @@ func ListPrompt() {
 	entries, err := os.ReadDir(QueueDir)
 	FATAL(err)
 	if len(entries) == 0 {
-		fmt.Println("Queue is empty")
+		fmt.Println("Queue is empty.")
 		return
 	}
 	elements := make([]string, 0, len(entries))
@@ -206,6 +206,10 @@ func ListPrompt() {
 	var actionIndex int = -1
 	scrollPosition := 0
 	for {
+		if len(elements) == 0 {
+			fmt.Println("Queue is empty.")
+			return
+		}
 		promptList := promptui.Select{
 			Label:     "Select queue element",
 			Items:     elements,
@@ -225,10 +229,16 @@ func ListPrompt() {
 				if err == nil {
 					elements = slices.Delete(elements, entryIndex, entryIndex+1)
 					_ = trash.Throw(filepath.Join(QueueDir, entries[entryIndex].Name()))
+					if entryIndex >= len(elements) {
+						entryIndex = len(elements) - 1
+					}
 				}
 			case 1:
 				elements = slices.Delete(elements, entryIndex, entryIndex+1)
 				_ = trash.Throw(filepath.Join(QueueDir, entries[entryIndex].Name()))
+				if entryIndex >= len(elements) {
+					entryIndex = len(elements) - 1
+				}
 			}
 		}
 		if err != nil {
