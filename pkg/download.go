@@ -37,6 +37,55 @@ func FmtUrl(url string) string {
 	return url
 }
 
+const (
+	FileDownloader = iota
+	GalleryDownloader
+	VideoDownloader
+	MediafireDownloader
+	MegaDownloader
+	InstagramDownloader
+)
+
+func handlerStringToEnum(handler string) int {
+	handler = strings.ToLower(handler)
+	switch handler {
+	case "gallery":
+		return GalleryDownloader
+	case "video":
+		return VideoDownloader
+	case "mediafire":
+		return MediafireDownloader
+	case "mega":
+		return MegaDownloader
+	case "instagram":
+		return InstagramDownloader
+	default:
+		return FileDownloader
+	}
+}
+
+func downloadUsingDownloader(handler int, url string, chStatus chan int) error {
+	var err error
+	switch handler {
+	case GalleryDownloader:
+		err = DownloadGallery(url, OutputDir)
+	case VideoDownloader:
+		err = DownloadVideo(url, OutputDir)
+	case MediafireDownloader:
+		err = downloadMediafire(url, OutputDir, chStatus)
+	case MegaDownloader:
+		err = downloadMega(url)
+	case InstagramDownloader:
+		err = DownloadInstagram(url)
+	default:
+		err = downloadFile(url, OutputDir)
+	}
+	if err == nil {
+		WARN("Finished downloading " + url)
+	}
+	return err
+}
+
 func download(url string, chStatus chan int) error {
 	WARN("Downloading " + url)
 	var err error = nil
@@ -67,7 +116,14 @@ func download(url string, chStatus chan int) error {
 }
 
 func Download(url string, chStatus chan int) error {
-	err := download(url, chStatus)
+	var err error = nil
+	if *Using != "" {
+		handler := handlerStringToEnum(*Using)
+		err = downloadUsingDownloader(handler, url, chStatus)
+	} else {
+		err = download(url, chStatus)
+	}
+
 	if err != nil {
 		ERROR("Unsupported URL:\n\t" + url + "\n")
 		// If nothing else worked, add the URL to a queue file.
