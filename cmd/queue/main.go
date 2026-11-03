@@ -1,10 +1,11 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"os"
 	"strconv"
+
+	flag "github.com/spf13/pflag"
 
 	. "gown/pkg"
 )

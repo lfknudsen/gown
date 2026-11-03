@@ -73,34 +73,32 @@ gown-client [OPTIONS] <URL(s)...>
             Requests a GRPC server to download the given URL(s).
 
 Options:
--h | --help         Print help message and exit.
+-h, --help                    Print help message and exit.
 
--overwrite          If a file with the name already exists, delete it. If this is
-                    false, the new file will be given a unique name instead.
-                    Default: false.
+-o, --overwrite               If a file with the name already exists, delete it. If this is
+                              false, the new file will be given a unique name instead.
+                              Default: false.
 
--generate-lists     Generates/re-generates the lists which contain the gallery
-                    and video websites supported for download. If your version
-                    of `gallery-dl` or `yt-dlp` is newer than when you last
-                    used this programme to download something using one of those,
-                    include this argument to update the lists, so that this
-                    programme can correctly delegate URLs to those services.
-                    Default: false.
+-g, --generate-lists          Generates/re-generates the lists which contain the gallery
+                              and video websites supported for download. If your version
+                              of `gallery-dl` or `yt-dlp` is newer than when you last
+                              used this programme to download something using one of those,
+                              include this argument to update the lists, so that this
+                              programme can correctly delegate URLs to those services.
+                              Default: false.
 
--s                  Perform downloads sequentially (by default multiple URLs are
-                    downloaded concurrently).
+-s, --sequential              Perform downloads sequentially (by default multiple URLs are
+                              downloaded concurrently).
 
--v <integer>        Verbosity level. Higher = more info is printed to console.
-                    0 is silent. Default: 1.
+-v, --verbose <integer>       Verbosity level. Higher = more info is printed to console.
+                              0 is silent. Default: 1.
 
--retries <integer>  The number of retries to attempt when downloading through
-                    gallery-dl. Less than 0 = infinite. Default: 5.
+-r, --retries <integer>       The number of retries to attempt when downloading through
+                              gallery-dl. Less than 0 = infinite. Default: 5.
 
--port <integer>     The port to connect/listen to when in server or client mode.
-                    Default: 8080
+-p, --port <integer>          The port to connect/listen to when in server or client mode.
+                              Default: 8080
 ```
-
-Whether you prefix options with one or two dashes is irrelevant.
 
 ## Supported websites
 

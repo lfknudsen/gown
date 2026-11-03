@@ -1,9 +1,10 @@
 package main
 
 import (
-	"flag"
 	. "gown/pkg"
 	. "gown/pkg/web"
+
+	flag "github.com/spf13/pflag"
 )
 
 func main() {

@@ -9,6 +9,7 @@ require (
 	github.com/hymkor/trash-go v0.3.0
 	github.com/lmorg/readline/v4 v4.2.5
 	github.com/manifoldco/promptui v0.9.0
+	github.com/spf13/pflag v1.0.10
 	google.golang.org/grpc v1.84.0
 	google.golang.org/protobuf v1.36.11
 )
