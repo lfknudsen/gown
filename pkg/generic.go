@@ -10,6 +10,8 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+
+	. "gown/pkg/util"
 )
 
 var rxUrlFilename *regexp.Regexp = regexp.MustCompile(
@@ -49,13 +51,13 @@ func downloadFile(url string, outputDir string) error {
 			}
 		}
 	}
-	defer closeFile(f)
+	defer CloseFile(f)
 
 	resp2, err := http.Get(url)
 	if err != nil {
 		return err
 	}
-	defer closeReadCloser(resp2.Body)
+	defer CloseReadCloser(resp2.Body)
 
 	DEBUG("Filename: " + out)
 	wr := bufio.NewWriter(f)

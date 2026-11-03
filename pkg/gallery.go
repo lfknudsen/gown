@@ -2,13 +2,14 @@ package pkg
 
 import (
 	"bufio"
-	"gown/pkg/util"
 	"io"
 	"net/http"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"regexp"
+
+	. "gown/pkg/util"
 
 	"github.com/deckarep/golang-set/v3"
 )
@@ -35,9 +36,9 @@ func matchesGallery(url string) bool {
 			return false
 		}
 	}
-	defer closeFile(f)
+	defer CloseFile(f)
 	scanner := bufio.NewScanner(f)
-	url = util.UrlRoot(url)
+	url = UrlRoot(url)
 	for scanner.Scan() {
 		if scanner.Text() == url {
 			return true
@@ -51,14 +52,14 @@ func matchesGallery(url string) bool {
 func GenerateGalleryList() {
 	res, err := http.Get("https://codeberg.org/mikf/gallery-dl/raw/branch/master/docs/supportedsites.md")
 	FATAL(err)
-	defer closeReadCloser(res.Body)
+	defer CloseReadCloser(res.Body)
 	reader := bufio.NewReader(res.Body)
 	content, err := io.ReadAll(reader)
 	FATAL(err)
 
 	InitialiseDirectories(DataDir)
 	f, err := os.OpenFile(supportedURLsFile, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0644)
-	defer closeFile(f)
+	defer CloseFile(f)
 
 	set := mapset.NewSet[string]()
 

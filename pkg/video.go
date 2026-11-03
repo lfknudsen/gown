@@ -4,11 +4,12 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
-	"gown/pkg/util"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"regexp"
+
+	. "gown/pkg/util"
 
 	mapset "github.com/deckarep/golang-set/v3"
 )
@@ -53,7 +54,7 @@ func GenerateVideoList() {
 
 	InitialiseDirectories(DataDir)
 	f, err := os.OpenFile(supportedVideoURLsFile, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0644)
-	defer closeFile(f)
+	defer CloseFile(f)
 	wr := bufio.NewWriter(f)
 	for entry := range set.Iter() {
 		_, err = wr.WriteString(entry + "\n")
@@ -71,9 +72,9 @@ func matchesVideo(url string) bool {
 			return false
 		}
 	}
-	defer closeFile(f)
+	defer CloseFile(f)
 	scanner := bufio.NewScanner(f)
-	url = util.UrlStem(url)
+	url = UrlStem(url)
 	for scanner.Scan() {
 		if scanner.Text() == url {
 			return true

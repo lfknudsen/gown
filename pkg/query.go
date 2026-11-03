@@ -4,6 +4,8 @@ import (
 	"net/http"
 	"strings"
 
+	. "gown/pkg/util"
+
 	"github.com/PuerkitoBio/goquery"
 )
 
@@ -13,7 +15,7 @@ func query(url string, tag string) (string, error) {
 	if err != nil {
 		return output, err
 	}
-	defer closeReadCloser(resp.Body)
+	defer CloseReadCloser(resp.Body)
 	doc, err := goquery.NewDocumentFromReader(resp.Body)
 	if err != nil {
 		return output, err

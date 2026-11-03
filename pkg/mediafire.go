@@ -10,6 +10,8 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+
+	. "gown/pkg/util"
 )
 
 // rxMediafire is used to extract the key information from a MediaFire URL so that we
@@ -41,7 +43,7 @@ func downloadMediafire(url string, outputDir string, chStatus chan int) error {
 	if err != nil {
 		return err
 	}
-	defer closeReadCloser(resp.Body)
+	defer CloseReadCloser(resp.Body)
 	if resp.StatusCode != 200 {
 		msg := fmt.Sprintf("Failed to download from URL:\n%s\nReceived status code %s.\n", url, resp.Status)
 		return errors.New(msg)
@@ -49,7 +51,7 @@ func downloadMediafire(url string, outputDir string, chStatus chan int) error {
 
 	temp, err := os.CreateTemp(os.TempDir(), "*.html")
 	_, err = io.Copy(temp, resp.Body)
-	closeFile(temp)
+	CloseFile(temp)
 	if err != nil {
 		return err
 	}
@@ -98,13 +100,13 @@ func downloadMediafire(url string, outputDir string, chStatus chan int) error {
 			}
 		}
 	}
-	defer closeFile(f)
+	defer CloseFile(f)
 
 	resp2, err := http.Get(directLink)
 	if err != nil {
 		return err
 	}
-	defer closeReadCloser(resp2.Body)
+	defer CloseReadCloser(resp2.Body)
 
 	DEBUG("Filename: " + out)
 	wr := bufio.NewWriter(f)

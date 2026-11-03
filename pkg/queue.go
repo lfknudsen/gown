@@ -10,7 +10,7 @@ import (
 	"slices"
 	"strings"
 
-	"gown/pkg/util"
+	. "gown/pkg/util"
 
 	"github.com/hymkor/trash-go"
 	"github.com/manifoldco/promptui"
@@ -26,7 +26,7 @@ func Queue(url ...string) error {
 			return err
 		}
 		_, err = f.WriteString(url + "\n")
-		closeFile(f)
+		CloseFile(f)
 		if err != nil {
 			return err
 		}
@@ -39,7 +39,7 @@ func compileFilename(url string) string {
 	hasher := md5.New()
 	hasher.Write([]byte(url))
 	hashOfURL := hasher.Sum(nil)
-	filename := fmt.Sprintf("%s-%x", util.TimeStamp(), hashOfURL)
+	filename := fmt.Sprintf("%s-%x", TimeStamp(), hashOfURL)
 	return filename + ".txt"
 }
 
@@ -107,7 +107,7 @@ func DownloadFirstN(n uint64) {
 		maximum = n
 	}
 	for ; i < maximum; i++ {
-		fmt.Printf("%s: ", util.FormatFractionU(i+1, maximum))
+		fmt.Printf("%s: ", FormatFractionU(i+1, maximum))
 		info, err := entries[i].Info()
 		if err != nil {
 			ERROR(err)
