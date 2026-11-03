@@ -1,28 +1,11 @@
 package pkg
 
 import (
-	"os"
-	"path/filepath"
 	"regexp"
 	"strings"
 )
 
 const VERSION = "0.5.0"
-
-func determineGownDir() string {
-	gownDir := os.Getenv("GOWN_DIR")
-	if gownDir == "" {
-		ex, err := os.Executable()
-		FATAL(err)
-		ExecutableDir := filepath.Dir(ex)
-		return filepath.Join(ExecutableDir, "gown")
-	}
-	return gownDir
-}
-
-var GownDirectory = determineGownDir()
-var OutputDir = filepath.Join(GownDirectory, "downloads")
-var DataDir = filepath.Join(GownDirectory, "data")
 
 var ChStatus = make(chan int, 1)
 
@@ -142,20 +125,4 @@ func Download(url string, chStatus chan int) error {
 // queue in the first place).
 func DownloadFromQueue(url string, chStatus chan int) error {
 	return download(url, chStatus)
-}
-
-// InitialiseDirectories ensures that the given directory or directories exist by
-// creating them if they do not.
-func InitialiseDirectories(dir ...string) {
-	for _, d := range dir {
-		err := os.MkdirAll(d, os.ModeDir)
-		FATAL(err)
-	}
-}
-
-// SetupDirs creates the major subdirectories needed. Individual handlers
-// may initialise and use their own if they so wish, but they can rely on
-// e.g. OutputDir existing.
-func SetupDirs() {
-	InitialiseDirectories(OutputDir, QueueDir, DirMega, RepoDir)
 }
