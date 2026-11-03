@@ -23,7 +23,6 @@ func determineGownDir() string {
 	return gownDir
 }
 
-var ExecutableDir = getExecutableDir()
 var GownDirectory = determineGownDir()
 var OutputDir = filepath.Join(GownDirectory, "downloads")
 var DataDir = filepath.Join(GownDirectory, "data")
@@ -37,6 +36,7 @@ func FmtUrl(url string) string {
 	return url
 }
 
+// enums for URL download handlers.
 const (
 	FileDownloader = iota
 	GalleryDownloader
@@ -46,6 +46,8 @@ const (
 	InstagramDownloader
 )
 
+// handlerStringToEnum translates a user-input string to the "enum" used
+// internally.
 func handlerStringToEnum(handler string) int {
 	handler = strings.ToLower(handler)
 	switch handler {
@@ -64,6 +66,8 @@ func handlerStringToEnum(handler string) int {
 	}
 }
 
+// downloadUsingDownloader circumvents the traditional delegation function
+// download and instead calls the relevant handler directly.
 func downloadUsingDownloader(handler int, url string, chStatus chan int) error {
 	var err error
 	switch handler {
@@ -86,6 +90,8 @@ func downloadUsingDownloader(handler int, url string, chStatus chan int) error {
 	return err
 }
 
+// download delegates the download process to specific programmes based on the URL.
+// The status channel is currently unused; nil is acceptable.
 func download(url string, chStatus chan int) error {
 	WARN("Downloading " + url)
 	var err error = nil
@@ -115,6 +121,8 @@ func download(url string, chStatus chan int) error {
 	return err
 }
 
+// Download starts the download process, and adds the URL to the queue
+// if the download could not complete for any reason.
 func Download(url string, chStatus chan int) error {
 	var err error = nil
 	if *Using != "" {
@@ -132,11 +140,15 @@ func Download(url string, chStatus chan int) error {
 	return err
 }
 
+// DownloadFromQueue starts the download process, but does not add the URL
+// to the queue on failure (the intention being that it got the link from the
+// queue in the first place).
 func DownloadFromQueue(url string, chStatus chan int) error {
 	return download(url, chStatus)
 }
 
-// InitialiseDirectories ensures that the given directories exist.
+// InitialiseDirectories ensures that the given directory or directories exist by
+// creating them if they do not.
 func InitialiseDirectories(dir ...string) {
 	for _, d := range dir {
 		err := os.MkdirAll(d, os.ModeDir)
@@ -144,6 +156,9 @@ func InitialiseDirectories(dir ...string) {
 	}
 }
 
+// SetupDirs creates the major subdirectories needed. Individual handlers
+// may initialise and use their own if they so wish, but they can rely on
+// e.g. OutputDir existing.
 func SetupDirs() {
 	InitialiseDirectories(OutputDir, QueueDir, DirMega, RepoDir)
 }
