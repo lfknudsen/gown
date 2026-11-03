@@ -46,6 +46,10 @@ func download(url string, chStatus chan int) error {
 		err = DownloadGit(url)
 	} else if matchesGallery(url) {
 		err = DownloadGallery(url, OutputDir)
+		// Some domains are matched by both because they can contain either images or videos.
+		if err != nil && matchesVideo(url) {
+			err = DownloadVideo(url, OutputDir)
+		}
 	} else if matchesVideo(url) {
 		err = DownloadVideo(url, OutputDir)
 	} else if matchesMegaURL(url) {
