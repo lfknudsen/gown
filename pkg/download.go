@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-const VERSION = "0.4.0"
+const VERSION = "0.5.0"
 
 func determineGownDir() string {
 	gownDir := os.Getenv("GOWN_DIR")
