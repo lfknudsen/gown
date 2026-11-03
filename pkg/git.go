@@ -2,11 +2,12 @@ package pkg
 
 import (
 	"fmt"
-	"gown/pkg/util"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"regexp"
+
+	"gown/pkg/util"
 
 	gogit "github.com/go-git/go-git/v6"
 )
