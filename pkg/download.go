@@ -9,15 +9,12 @@ import (
 
 const VERSION = "0.4.0"
 
-func getExecutableDir() string {
-	ex, err := os.Executable()
-	FATAL(err)
-	return filepath.Dir(ex)
-}
-
 func determineGownDir() string {
 	gownDir := os.Getenv("GOWN_DIR")
 	if gownDir == "" {
+		ex, err := os.Executable()
+		FATAL(err)
+		ExecutableDir := filepath.Dir(ex)
 		return filepath.Join(ExecutableDir, "gown")
 	}
 	return gownDir
