@@ -3,9 +3,10 @@ package web
 import (
 	"context"
 	"fmt"
-	"gown/pkg"
-	listen "gown/proto"
 	"uuid"
+
+	"gown/pkg"
+	"gown/proto/listen"
 
 	"google.golang.org/grpc"
 )

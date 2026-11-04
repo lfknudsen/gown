@@ -22,15 +22,15 @@ go-install:
 	go install -C cmd/gown-srv
 	go install -C cmd/gown-client
 
-protoc: proto/listen.proto
-	protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative proto/listen.proto --descriptor_set_out=docs/descriptor.pb --include_source_info
+protoc: proto/listen/listen.proto
+	protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative proto/listen/listen.proto --descriptor_set_out=docs/descriptor.pb --include_source_info
 
 doc: docs/descriptor.pb
 	cd docs; sabledocs
 
-tiara: proto/listen.proto
+tiara: proto/listen/listen.proto
 	protoc --dart_out="grpc:."  proto/listen.proto --descriptor_set_out=docs/descriptor.pb --include_source_info
-	rm proto/listen.pbserver.dart
-	mv proto/*.dart ../tiara/lib/proto
+	rm proto/listen/listen.pbserver.dart
+	mv proto/listen/*.dart ../tiara/lib/proto
 	cp docs/descriptor.pb ../tiara/docs/descriptor.pb
 	cd ../tiara/docs; sabledocs

@@ -3,10 +3,11 @@ package web
 import (
 	"context"
 	"fmt"
-	"gown/pkg"
-	. "gown/proto"
 	"log"
 	"net"
+
+	"gown/pkg"
+	. "gown/proto/listen"
 
 	"google.golang.org/grpc"
 )
