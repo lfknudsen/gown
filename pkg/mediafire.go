@@ -14,6 +14,10 @@ import (
 	. "gown/pkg/util"
 )
 
+const mediafireDirName = "mediafire"
+
+var mediafireDir = filepath.Join(OutputDir, mediafireDirName)
+
 // rxMediafire is used to extract the key information from a MediaFire URL so that we
 // can bypass redirects and middle-steps.
 var rxMediafire *regexp.Regexp = regexp.MustCompile(
@@ -70,13 +74,13 @@ func downloadMediafire(url string, outputDir string, chStatus chan int) error {
 	directLink := match[1]
 	DEBUG(fmt.Sprintf("Direct link: \"%s\"", directLink))
 
-	err = os.MkdirAll(outputDir, 0755)
+	err = os.MkdirAll(mediafireDir, 0755)
 	if err != nil {
 		return err
 	}
 
 	filename := matches[0][3]
-	out := filepath.Join(outputDir, filename)
+	out := filepath.Join(mediafireDir, filename)
 	DEBUG(fmt.Sprintf("Filename: %s", out))
 
 	f, err := os.OpenFile(out, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0666)
