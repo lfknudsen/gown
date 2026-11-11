@@ -15,12 +15,13 @@ import (
 )
 
 var rxUrlFilename *regexp.Regexp = regexp.MustCompile(
-	`(?i)\s*(?:https?://)?(?:ww[^.]\.)?(?:[^/]/)+([^/]+])`)
+	`(?i)\s*(?:https?://)?(?:ww[^.]\.)?(?:[^/]+/)+([^/]+])`)
 
 func downloadFile(url string, outputDir string) error {
 	matches := rxUrlFilename.FindStringSubmatch(url)
 	if len(matches) != 2 {
-		msg := fmt.Sprintf("Could not parse URL:\n%s\n", url)
+		fmt.Printf("File URL does not match regex: %s\n", url)
+		msg := fmt.Sprintf("Could not parse file URL:\n%s\n", url)
 		return errors.New(msg)
 	}
 	err := os.MkdirAll(outputDir, 0755)
@@ -53,15 +54,15 @@ func downloadFile(url string, outputDir string) error {
 	}
 	defer CloseFile(f)
 
-	resp2, err := http.Get(url)
+	resp, err := http.Get(url)
 	if err != nil {
 		return err
 	}
-	defer CloseReadCloser(resp2.Body)
+	defer CloseReadCloser(resp.Body)
 
 	DEBUG("Filename: " + out)
 	wr := bufio.NewWriter(f)
-	sz, err := io.Copy(wr, resp2.Body)
+	sz, err := io.Copy(wr, resp.Body)
 	if err != nil {
 		return err
 	}
