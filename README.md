@@ -20,17 +20,19 @@ Downloading from Google Drive requires `gdown`
 
 ## Build
 
-The project can build three separate executables, though all functionality can
+The project can build several separate executables, though all functionality can
 be reached with the main `gown`, located in `cmd\gown`:
 
 ```
-go build -C cmd/gown [-o <output file-path>]
+go build -C cmd/gown [-o <output directory or file>]
 ```
 
 To build the other utilities:
 ```
-go build -C cmd/queue [-o <output file-path>]
-go build -C cmd/gown-srv [-o <output file-path>]
+go build -C cmd/queue [-o <output directory or file>]
+go build -C cmd/gown-srv [-o <output directory or file>]
+go build -C cmd/gown-client [-o <output directory or file>]
+go build -C cmd/worker [-o <output directory or file>]
 ```
 
 A Makefile exists to ease the build process. Some of the recipes (including `all`)
