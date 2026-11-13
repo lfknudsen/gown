@@ -1,6 +1,9 @@
 # Gown
 
-Download utility. Supports multiple URLs at once. Concurrent.
+Universal downloader that can be executed as a CLI application, a GRPC server,
+or as a set of worker nodes interfacing with a message queue.
+Downloads can be added to a queue for later download.
+Supports multiple URLs at once. Concurrent.
 
 For most websites, the process is delegated to specialised programmes
 which will need to be installed.
