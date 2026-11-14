@@ -3,10 +3,14 @@
 Universal downloader that can be executed as a CLI application, a GRPC server,
 or as a set of worker nodes interfacing with a message queue.
 Downloads can be added to a queue for later download.
-Supports multiple URLs at once. Concurrent.
+Supports multiple URLs at once. Optionally concurrent.
 
 For most websites, the process is delegated to specialised programmes
 which will need to be installed.
+
+#### Related programmes:
+[Tiara](https://gitlab.com/lfknudsen/tiara): Cross-platform frontend\
+[Convoy](https://gitlab.com/lfknudsen/convoy): Message queue
 
 ## Dependencies
 To build, only `Go` is required to be installed.
@@ -46,6 +50,14 @@ make
 ```
 
 ## Usage
+
+In practice, I recommend you use `gown` for standalone, non-server use.\
+The same applies to `queue`, a subset of `gown` which exists for the sake of usability.
+
+The server is most easily started with `gown-srv`.\
+`gown-client` is a CLI client which interacts with `gown-srv`.\
+`worker` is a back-end client and server which only interacts with the [Convoy](https://gitlab.com/lfknudsen/convoy) message queue.
+
 ```
 gown [OPTIONS] <URLs...>
             Downloads the given URL(s).
@@ -63,10 +75,10 @@ gown queue list
 queue list
             Prints the URLs in the queue to the standard output.
 
-gown [OPTIONS] interactive
+gown [OPTIONS] interactive, gown [OPTIONS] repl
 gown-srv [OPTIONS]
             Launches an interactive shell which allows you to repeatedly
-            input and download URLs.
+            input and download/queue URLs.
             Exit by entering (without quotiation marks) "exit" or "quit".
 
 gown [OPTIONS] server
@@ -102,7 +114,7 @@ Options:
 -r, --retries <integer>       The number of retries to attempt when downloading through
                               gallery-dl. Less than 0 = infinite. Default: 5.
 
--p, --port <integer>          The port to connect/listen to when in server or client mode.
+-p, --port <integer>          The port to connect/listen to when in client or server mode.
                               Default: 8080
 ```
 
