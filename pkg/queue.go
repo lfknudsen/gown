@@ -72,27 +72,30 @@ func DownloadQueue() {
 		return
 	}
 	chStatus := make(chan int)
-	for _, entry := range entries {
-		info, err := entry.Info()
-		if err != nil {
+	for err == nil && len(entries) > 0 {
+		for _, entry := range entries {
+			info, err := entry.Info()
+			if err != nil {
+				ERROR(err)
+				continue
+			}
+			if !info.Mode().IsRegular() {
+				continue
+			}
+			filePath := filepath.Join(QueueDir, entry.Name())
+			data, err := os.ReadFile(filePath)
+			if err != nil {
+				ERROR(err)
+				continue
+			}
+			url := strings.TrimSpace(string(data))
+			err = DownloadFromQueue(url, chStatus)
+			if err == nil {
+				_ = trash.Throw(filePath)
+			}
 			ERROR(err)
-			continue
 		}
-		if !info.Mode().IsRegular() {
-			continue
-		}
-		filePath := filepath.Join(QueueDir, entry.Name())
-		data, err := os.ReadFile(filePath)
-		if err != nil {
-			ERROR(err)
-			continue
-		}
-		url := strings.TrimSpace(string(data))
-		err = DownloadFromQueue(url, chStatus)
-		if err == nil {
-			_ = trash.Throw(filePath)
-		}
-		ERROR(err)
+		entries, err = os.ReadDir(QueueDir)
 	}
 }
 
