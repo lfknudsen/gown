@@ -56,7 +56,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	if len(flag.Args()) >= 1 && flag.Args()[0] == "interactive" {
+	if len(flag.Args()) >= 1 && (flag.Args()[0] == "interactive" || flag.Args()[0] == "repl") {
 		Interactive()
 		os.Exit(0)
 	}
