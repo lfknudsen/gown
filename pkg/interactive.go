@@ -72,7 +72,7 @@ func Interactive() {
 				break
 			}
 			for _, url := range words[1:] {
-				err = Queue(url)
+				_, err = Queue(url)
 				ERROR(err)
 			}
 		case "list":
@@ -83,13 +83,15 @@ func Interactive() {
 		default:
 			switch mode {
 			case downloadMode:
-				for _, url := range words {
-					err = Download(url, ChStatus)
+				filenames, err := Queue(words...)
+				ERROR(err)
+				for _, url := range filenames {
+					err = DownloadQueueItem(url)
 					ERROR(err)
 				}
 			case queueMode:
 				for _, url := range words {
-					err = Queue(url)
+					_, err = Queue(url)
 					ERROR(err)
 				}
 			default:

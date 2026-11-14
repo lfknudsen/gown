@@ -18,21 +18,23 @@ import (
 
 var QueueDir string = filepath.Join(GownDirectory, "queue")
 
-func Queue(url ...string) error {
+func Queue(url ...string) ([]string, error) {
+	filenames := make([]string, 0, len(url))
 	for _, url := range url {
 		filename := filepath.Join(QueueDir, compileFilename(url))
 		f, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 		if err != nil {
-			return err
+			return filenames, err
 		}
 		_, err = f.WriteString(url + "\n")
 		CloseFile(f)
 		if err != nil {
-			return err
+			return filenames, err
 		}
+		filenames = append(filenames, filename)
 		WARN(fmt.Sprintf("Added to queue: %s", url))
 	}
-	return nil
+	return filenames, nil
 }
 
 func compileFilename(url string) string {
@@ -92,6 +94,19 @@ func DownloadQueue() {
 		}
 		ERROR(err)
 	}
+}
+
+func DownloadQueueItem(filePath string) error {
+	data, err := os.ReadFile(filePath)
+	if err != nil {
+		return err
+	}
+	url := strings.TrimSpace(string(data))
+	err = DownloadFromQueue(url, nil)
+	if err == nil {
+		_ = trash.Throw(filePath)
+	}
+	return err
 }
 
 func DownloadFirstN(n uint64) {

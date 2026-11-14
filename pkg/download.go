@@ -117,7 +117,7 @@ func Download(url string, chStatus chan int) error {
 	if err != nil {
 		ERROR("Unsupported URL:\n\t" + url + "\n")
 		// If nothing else worked, add the URL to a queue file.
-		err = Queue(url)
+		_, err = Queue(url)
 	}
 	return err
 }

@@ -50,7 +50,7 @@ func main() {
 		} else if len(flag.Args()) == 2 && flag.Args()[1] == "list" {
 			ListPrompt()
 		} else {
-			err := Queue(flag.Args()[1:]...)
+			_, err := Queue(flag.Args()[1:]...)
 			FATAL(err)
 		}
 		os.Exit(0)
@@ -76,17 +76,19 @@ func main() {
 		}
 	}
 
+	filenames, err := Queue(flag.Args()...)
+	FATAL(err)
 	if *Singlethreaded {
-		for i, url := range flag.Args() {
+		for i, filePath := range filenames {
 			fmt.Printf("(%s) ", util.FormatFraction(i+1, len(flag.Args())))
-			err := Download(url, ChStatus)
+			err = DownloadQueueItem(filePath)
 			ERROR(err)
 		}
 	} else {
 		wait := sync.WaitGroup{}
-		for _, url := range flag.Args() {
+		for _, filePath := range filenames {
 			wait.Go(func() {
-				err := Download(url, ChStatus)
+				err = DownloadQueueItem(filePath)
 				ERROR(err)
 			})
 		}

@@ -54,7 +54,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	err := Queue(flag.Args()...)
+	_, err := Queue(flag.Args()...)
 	FATAL(err)
 
 	DEBUG("Done")
