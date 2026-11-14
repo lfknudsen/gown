@@ -1,20 +1,17 @@
 all: proto install
 
 compile:
-	go build -C cmd/gown
-	go build -C cmd/queue
-	go build -C cmd/gown-srv
-	go build -C cmd/gown-client
+	go build -C cmd/gown -o ../..
+	go build -C cmd/queue -o ../..
+	go build -C cmd/gown-srv -o ../..
+	go build -C cmd/gown-client -o ../..
+	go build -C cmd/gown-worker -o ../..
 
 install: compile
-	install cmd/gown/gown.exe cmd/queue/queue.exe cmd/gown-srv/gown-srv.exe cmd/gown-client/gown-client.exe
+	install gown.exe queue.exe gown-srv.exe gown-client.exe gown-worker.exe
 
-gnu:
-	go build -C cmd/gown -o ../../gown
-	go build -C cmd/queue -o ../../queue
-	go build -C cmd/gown-srv -o ../../gown-srv
-	go build -C cmd/gown-client/gown-client -o ../../gown-client
-	install gown queue gown-srv
+gnu: compile
+	install gown queue gown-srv gown-client gown-worker
 
 go-install:
 	go install -C cmd/gown
