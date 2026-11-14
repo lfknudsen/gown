@@ -34,7 +34,7 @@ const (
 var promptText = map[int]string{
 	lineMode:     "\033[94m>>>\033[0m ",
 	downloadMode: "\033[32mDL\033[94m>\033[0m ",
-	queueMode:    "\033[35mQ\033[94m>>\033[0m ",
+	queueMode:    "\033[35mQu\033[94m>\033[0m ",
 }
 
 func Interactive() {
