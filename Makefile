@@ -5,10 +5,9 @@ compile:
 	go build -C cmd/queue -o ../..
 	go build -C cmd/gown-srv -o ../..
 	go build -C cmd/gown-client -o ../..
-	go build -C cmd/gown-worker -o ../..
 
 install: compile
-	install gown.exe queue.exe gown-srv.exe gown-client.exe gown-worker.exe
+	install gown.exe queue.exe gown-srv.exe gown-client.exe
 
 gnu: compile
 	install gown queue gown-srv gown-client gown-worker
