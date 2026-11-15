@@ -24,6 +24,7 @@ const (
 	MediafireDownloader
 	MegaDownloader
 	InstagramDownloader
+	GoogleDriveDownloader
 )
 
 // handlerStringToEnum translates a user-input string to the "enum" used
@@ -41,6 +42,8 @@ func handlerStringToEnum(handler string) int {
 		return MegaDownloader
 	case "instagram":
 		return InstagramDownloader
+	case "gdrive":
+		return GoogleDriveDownloader
 	default:
 		return FileDownloader
 	}
@@ -61,6 +64,8 @@ func downloadUsingDownloader(handler int, url string, chStatus chan int) error {
 		err = downloadMega(url)
 	case InstagramDownloader:
 		err = DownloadInstagram(url)
+	case GoogleDriveDownloader:
+		err = downloadGoogle(url, OutputDir)
 	default:
 		err = downloadFile(url, OutputDir)
 	}
