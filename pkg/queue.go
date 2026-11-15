@@ -16,7 +16,8 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
-var QueueDir string = filepath.Join(GownDirectory, "queue")
+var QueueDir = filepath.Join(GownDirectory, "queue")
+var FailedDir = filepath.Join(GownDirectory, "failed")
 
 func Queue(url ...string) ([]string, error) {
 	filenames := make([]string, 0, len(url))
@@ -71,7 +72,6 @@ func DownloadQueue() {
 	if len(entries) == 0 {
 		return
 	}
-	chStatus := make(chan int)
 	for err == nil && len(entries) > 0 {
 		for _, entry := range entries {
 			info, err := entry.Info()
@@ -83,16 +83,7 @@ func DownloadQueue() {
 				continue
 			}
 			filePath := filepath.Join(QueueDir, entry.Name())
-			data, err := os.ReadFile(filePath)
-			if err != nil {
-				ERROR(err)
-				continue
-			}
-			url := strings.TrimSpace(string(data))
-			err = DownloadFromQueue(url, chStatus)
-			if err == nil {
-				_ = trash.Throw(filePath)
-			}
+			err = DownloadQueueItem(filePath)
 			ERROR(err)
 		}
 		entries, err = os.ReadDir(QueueDir)
@@ -108,6 +99,10 @@ func DownloadQueueItem(filePath string) error {
 	err = DownloadFromQueue(url, nil)
 	if err == nil {
 		_ = trash.Throw(filePath)
+	} else {
+		dst := filepath.Base(filePath)
+		dst = filepath.Join(FailedDir, dst)
+		err = os.Rename(filePath, dst)
 	}
 	return err
 }

@@ -38,5 +38,5 @@ func InitialiseDirectories(dir ...string) {
 // may initialise and use their own if they so wish, but they can rely on
 // e.g. OutputDir existing.
 func SetupDirs() {
-	InitialiseDirectories(OutputDir, QueueDir, DirMega, RepoDir)
+	InitialiseDirectories(OutputDir, QueueDir, DirMega, RepoDir, FailedDir)
 }
