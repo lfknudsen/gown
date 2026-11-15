@@ -8,6 +8,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"regexp"
+	"strings"
 
 	. "gown/pkg/util"
 
@@ -21,8 +22,12 @@ const subDirVideos = "yt-dlp"
 func DownloadVideo(url string, outputDir string) error {
 	outputDir = filepath.Join(outputDir, subDirVideos)
 	cmd := exec.Command("yt-dlp",
-		"--write-subs", "--write-auto-subs", "--sub-langs", "en.*", "--embed-subs", "--embed-thumbnail",
-		"--embed-metadata", "--embed-chapters", "--write-description", "--write-info-json", "--windows-filenames", "-P", outputDir, url)
+		"--write-subs", "--write-auto-subs", "--sub-langs", "en.*", "--embed-subs",
+		"--embed-thumbnail",
+		"--embed-metadata", "--embed-chapters", "--write-description", "--write-info-json",
+		"--windows-filenames",
+		"-P", outputDir,
+		url)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd.Run()
@@ -49,7 +54,7 @@ func GenerateVideoList() {
 			fmt.Printf("Could not parse domain %s", text)
 			continue
 		}
-		set.Add(matches[1])
+		set.Add(strings.ToLower(matches[1]))
 	}
 
 	InitialiseDirectories(DataDir)
@@ -74,7 +79,7 @@ func matchesVideo(url string) bool {
 	}
 	defer CloseFile(f)
 	scanner := bufio.NewScanner(f)
-	url = UrlStem(url)
+	url = strings.ToLower(UrlStem(url))
 	for scanner.Scan() {
 		if scanner.Text() == url {
 			return true
