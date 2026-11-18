@@ -8,6 +8,8 @@ Supports multiple URLs at once. Optionally concurrent.
 For most websites, the process is delegated to specialised programmes
 which will need to be installed.
 
+Worker node functionality is a work-in-progress.
+
 #### Related programmes:
 [Tiara](https://gitlab.com/lfknudsen/tiara): Cross-platform frontend\
 [Convoy](https://gitlab.com/lfknudsen/convoy): Message queue
