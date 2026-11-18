@@ -96,7 +96,7 @@ func download(url string, chStatus chan int) error {
 		err = DownloadMega(url)
 	} else if strings.Contains(url, "instagram.com") {
 		err = DownloadInstagram(url)
-	} else if DatchesGoogleDrive(url) {
+	} else if MatchesGoogleDrive(url) {
 		err = DownloadGoogle(url, OutputDir)
 	} else {
 		// Fallback

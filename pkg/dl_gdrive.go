@@ -13,7 +13,7 @@ var googleDriveDir = filepath.Join(OutputDir, googleDriveDirName)
 
 var rxGoogle = regexp.MustCompile(`(?:https?://)?(?:ww[.].)?(?:drive|docs)\.google\.com/(?:file/d/([a-zA-Z0-9_-]{10,})|(?:open|uc)\?(?:[^&]*&)*id=([a-zA-Z0-9_-]{10,}))/.+`)
 
-func DatchesGoogleDrive(url string) bool {
+func MatchesGoogleDrive(url string) bool {
 	return rxGoogle.MatchString(url)
 }
 
