@@ -65,7 +65,7 @@ func downloadUsingDownloader(handler int, url string, chStatus chan int) error {
 	case InstagramDownloader:
 		err = DownloadInstagram(url)
 	case GoogleDriveDownloader:
-		err = downloadGoogle(url, OutputDir)
+		err = DownloadGoogle(url, OutputDir)
 	default:
 		err = downloadFile(url, OutputDir)
 	}
@@ -96,8 +96,8 @@ func download(url string, chStatus chan int) error {
 		err = DownloadMega(url)
 	} else if strings.Contains(url, "instagram.com") {
 		err = DownloadInstagram(url)
-	} else if matchesGoogleDrive(url) {
-		err = downloadGoogle(url, OutputDir)
+	} else if DatchesGoogleDrive(url) {
+		err = DownloadGoogle(url, OutputDir)
 	} else {
 		// Fallback
 		err = downloadFile(url, OutputDir)
