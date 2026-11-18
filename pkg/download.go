@@ -61,7 +61,7 @@ func downloadUsingDownloader(handler int, url string, chStatus chan int) error {
 	case MediafireDownloader:
 		err = downloadMediafire(url, OutputDir, chStatus)
 	case MegaDownloader:
-		err = downloadMega(url)
+		err = DownloadMega(url)
 	case InstagramDownloader:
 		err = DownloadInstagram(url)
 	case GoogleDriveDownloader:
@@ -93,7 +93,7 @@ func download(url string, chStatus chan int) error {
 	} else if matchesVideo(url) {
 		err = DownloadVideo(url, OutputDir)
 	} else if matchesMegaURL(url) {
-		err = downloadMega(url)
+		err = DownloadMega(url)
 	} else if strings.Contains(url, "instagram.com") {
 		err = DownloadInstagram(url)
 	} else if matchesGoogleDrive(url) {

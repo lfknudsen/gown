@@ -23,7 +23,7 @@ var DirMega = filepath.Join(OutputDir, DirMegaName)
 
 var rxFolderName = regexp.MustCompile(`<span class="not-loading selectable-txt">([^<]+)</span>`)
 
-func downloadMega(url string) error {
+func DownloadMega(url string) error {
 	matches := rxMegaURL.FindStringSubmatch(url)[1:]
 	if len(matches) < 1 || len(matches) > 2 {
 		return errors.New(fmt.Sprintf("weirdly formatted MEGA URL: %s", url))
