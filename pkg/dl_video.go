@@ -68,7 +68,7 @@ func GenerateVideoList() {
 	_ = wr.Flush()
 }
 
-func matchesVideo(url string) bool {
+func MatchesVideo(url string) bool {
 	f, err := os.OpenFile(supportedVideoURLsFile, os.O_RDONLY, 0666)
 	if err != nil {
 		GenerateVideoList()

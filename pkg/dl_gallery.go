@@ -25,8 +25,8 @@ func DownloadGallery(url string, outputDir string) error {
 	return cmd.Run()
 }
 
-// matchesGallery returns true if the given URL supported by `gallery-dl`.
-func matchesGallery(url string) bool {
+// MatchesGallery returns true if the given URL supported by `gallery-dl`.
+func MatchesGallery(url string) bool {
 	f, err := os.OpenFile(supportedURLsFile, os.O_RDONLY, 0666)
 	if err != nil {
 		GenerateGalleryList()

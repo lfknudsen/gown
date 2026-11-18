@@ -17,7 +17,7 @@ import (
 var rxUrlFilename *regexp.Regexp = regexp.MustCompile(
 	`(?i)\s*(?:https?://)?(?:ww[^.]\.)?(?:[^/]+/)+([^/]+])`)
 
-func downloadFile(url string, outputDir string) error {
+func DownloadFile(url string, outputDir string) error {
 	matches := rxUrlFilename.FindStringSubmatch(url)
 	if len(matches) != 2 {
 		fmt.Printf("File URL does not match regex: %s\n", url)

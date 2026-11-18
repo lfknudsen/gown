@@ -27,14 +27,14 @@ var rxMediafire *regexp.Regexp = regexp.MustCompile(
 var rxLink *regexp.Regexp = regexp.MustCompile(
 	`aria-label="Download file"\s*href="([^"]+)"`)
 
-// downloadFromQuickKey is a convenience function which internally calls downloadMediafire
+// downloadFromQuickKey is a convenience function which internally calls DownloadMediafire
 func downloadFromQuickKey(quickKey string, outputDir string, chStatus chan int) error {
-	return downloadMediafire("https://www.mediafire.com/?"+quickKey, outputDir, chStatus)
+	return DownloadMediafire("https://www.mediafire.com/?"+quickKey, outputDir, chStatus)
 }
 
-// downloadMediafire downloads the HTML for the relevant page, copies the direct link from the
+// DownloadMediafire downloads the HTML for the relevant page, copies the direct link from the
 // download button, and finally downloads the file from that direct link.
-func downloadMediafire(url string, outputDir string, chStatus chan int) error {
+func DownloadMediafire(url string, outputDir string, chStatus chan int) error {
 	matches := rxMediafire.FindAllStringSubmatch(url, -1)
 	if len(matches) == 0 || len(matches[0]) < 4 {
 		msg := fmt.Sprintf("Could not parse URL:\n%s\n", url)

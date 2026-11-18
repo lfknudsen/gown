@@ -13,7 +13,7 @@ import (
 var rxMegaURL = regexp.MustCompile(
 	`(?:https?://)?(?:www\.)?mega(?:\.co)?\.nz/(folder|file)/(.+)`)
 
-func matchesMegaURL(url string) bool {
+func MatchesMegaURL(url string) bool {
 	return rxMegaURL.MatchString(url)
 }
 

@@ -59,7 +59,7 @@ func downloadUsingDownloader(handler int, url string, chStatus chan int) error {
 	case VideoDownloader:
 		err = DownloadVideo(url, OutputDir)
 	case MediafireDownloader:
-		err = downloadMediafire(url, OutputDir, chStatus)
+		err = DownloadMediafire(url, OutputDir, chStatus)
 	case MegaDownloader:
 		err = DownloadMega(url)
 	case InstagramDownloader:
@@ -67,7 +67,7 @@ func downloadUsingDownloader(handler int, url string, chStatus chan int) error {
 	case GoogleDriveDownloader:
 		err = DownloadGoogle(url, OutputDir)
 	default:
-		err = downloadFile(url, OutputDir)
+		err = DownloadFile(url, OutputDir)
 	}
 	if err == nil {
 		WARN("Finished downloading " + url)
@@ -81,18 +81,18 @@ func download(url string, chStatus chan int) error {
 	WARN("Downloading " + url)
 	var err error = nil
 	if strings.Contains(url, "mediafire.com") {
-		err = downloadMediafire(url, OutputDir, chStatus)
+		err = DownloadMediafire(url, OutputDir, chStatus)
 	} else if rxGit.MatchString(url) {
 		err = DownloadGit(url)
-	} else if matchesGallery(url) {
+	} else if MatchesGallery(url) {
 		err = DownloadGallery(url, OutputDir)
 		// Some domains are matched by both because they can contain either images or videos.
-		if err != nil && matchesVideo(url) {
+		if err != nil && MatchesVideo(url) {
 			err = DownloadVideo(url, OutputDir)
 		}
-	} else if matchesVideo(url) {
+	} else if MatchesVideo(url) {
 		err = DownloadVideo(url, OutputDir)
-	} else if matchesMegaURL(url) {
+	} else if MatchesMegaURL(url) {
 		err = DownloadMega(url)
 	} else if strings.Contains(url, "instagram.com") {
 		err = DownloadInstagram(url)
@@ -100,7 +100,7 @@ func download(url string, chStatus chan int) error {
 		err = DownloadGoogle(url, OutputDir)
 	} else {
 		// Fallback
-		err = downloadFile(url, OutputDir)
+		err = DownloadFile(url, OutputDir)
 	}
 	if err == nil {
 		WARN("Finished downloading " + url)
