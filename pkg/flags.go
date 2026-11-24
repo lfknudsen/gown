@@ -8,7 +8,8 @@ import (
 	flag "github.com/spf13/pflag"
 )
 
-var Help = flag.BoolP("help", "h", false, "Print this message and exit. (Alias: --help)")
+var Help = flag.BoolP("help", "h", false,
+	"Print this message and exit. (Alias: --help)")
 
 var Overwrite = flag.BoolP("overwrite", "o", false,
 	"Overwrite existing files rather than choosing a unique name for the new one.")
@@ -27,7 +28,8 @@ var Port = flag.IntP("port", "p", 8080, "The port to connect or listen to.")
 
 var PrintTitle = flag.BoolP("title", "t", false, "When listing the queue, print each link's HTML title.")
 
-var Using = flag.StringP("using", "u", "", "Use the download handler specified rather than delegating based on URL.\n"+
+var Using = flag.StringP("using", "u", "",
+	"Use the download handler specified rather than delegating based on URL.\n"+
 	"Accepted are: 'gallery', 'video', 'mediafire', 'mega', 'instagram', 'file'.\n"+
 	"Falls back to file if argument is unrecognised.")
 
