@@ -16,9 +16,6 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
-var QueueDir = filepath.Join(GownDirectory, "queue")
-var FailedDir = filepath.Join(GownDirectory, "failed")
-
 func Queue(url ...string) ([]string, error) {
 	filenames := make([]string, 0, len(url))
 	for _, url := range url {
